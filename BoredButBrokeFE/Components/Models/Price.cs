@@ -2,9 +2,9 @@
 {
     public enum Price
     {
-        Cheap,
-        Moderate,
-        Expensive,
-        VeryExpensive
+        Cheap = 1,
+        Moderate = 2,
+        Expensive = 3,
+        VeryExpensive = 4
     }
 }
