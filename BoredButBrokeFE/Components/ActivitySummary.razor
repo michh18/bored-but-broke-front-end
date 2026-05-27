@@ -1,0 +1,35 @@
+﻿@using BoredButBrokeFE.Components.Models
+@rendermode InteractiveServer
+
+@if (Activity is null) return;
+
+<div class="activity-card">
+    <div class="activity-info">
+        <img src="@Activity.PhotoUrl" alt="@Activity.ActivityName"/>
+        <h3>@Activity.ActivityName</h3>
+        <p>@Activity.Address</p>
+        <p>@Activity.MainCategory > @Activity.SubCategory</p>
+        <p>⭐@Activity.Rating</p>
+        @if (@Activity.Price == Price.Cheap)
+        {
+            <p>£</p>
+        }
+        else if (@Activity.Price == Price.Moderate)
+        {
+            <p>££</p>
+        }
+        else if (@Activity.Price == Price.Expensive)
+        {
+            <p>£££</p>
+        }
+        else if (@Activity.Price == Price.VeryExpensive)
+        {
+            <p>££££</p>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Activity Activity { get; set; }
+}
