@@ -1,0 +1,122 @@
+﻿@using BoredButBrokeFE.Components.Models
+
+<div class="activity-grid">
+    @foreach (var activity in Activities)
+    {   
+        <ActivitySummary Activity="activity"/>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public List<Activity> Activities { get; set; } = new List<Activity>
+    {
+        new Activity
+        {
+            ActivityId = "1",
+            ActivityName = "Arcade Games Night",
+            Address = "Camden, London",
+            MainCategory = "Arts & Entertainment",
+            SubCategory = "Arcade",
+            Price = Price.Moderate,
+            Latitude = 51.541270,
+            Longitude = -0.142000,
+
+            Hours = new Hours
+            {
+                Monday = new[]
+                {
+                    new[] { "05:00", "00:00" }
+                },
+
+                Tuesday = new[]
+                {
+                    new[] { "05:00", "00:00" }
+                },
+
+                Wednesday = new[]
+                {
+                    new[] { "05:00", "00:00" }
+                },
+
+                Thursday = new[]
+                {
+                    new[] { "05:00", "00:00" }
+                },
+
+                Friday = new[]
+                {
+                    new[] { "05:00", "00:00" }
+                },
+
+                Saturday = new[]
+                {
+                    new[] { "05:00", "00:00" }
+                },
+
+                Sunday = new[]
+                {
+                    new[] { "05:00", "00:00" }
+                }
+            },
+
+            Rating = 4.9,
+            LocationUrl = "https://maps.google.com",
+            PhotoUrl = "https://images.unsplash.com/photo-1518998053901-5348d3961a04"
+        },
+
+        new Activity
+        {
+            ActivityId = "2",
+            ActivityName = "Tate Modern Visit",
+            Address = "Bankside, London",
+            MainCategory = "Culture",
+            SubCategory = "Museum",
+            Price = Price.Cheap,
+            Latitude = 51.507593,
+            Longitude = -0.099356,
+
+            Hours = new Hours
+            {
+                Monday = new[]
+                {
+                    new[] { "10:00", "18:00" }
+                },
+
+                Tuesday = new[]
+                {
+                    new[] { "10:00", "18:00" }
+                },
+
+                Wednesday = new[]
+                {
+                    new[] { "10:00", "18:00" }
+                },
+
+                Thursday = new[]
+                {
+                    new[] { "10:00", "18:00" }
+                },
+
+                Friday = new[]
+                {
+                    new[] { "10:00", "18:00" }
+                },
+
+                Saturday = new[]
+                {
+                    new[] { "10:00", "20:00" }
+                },
+
+                Sunday = new[]
+                {
+                    new[] { "10:00", "18:00" }
+                }
+            },
+
+            Rating = 4.7,
+            LocationUrl = "https://maps.google.com",
+            PhotoUrl = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"
+        }
+    };
+}
