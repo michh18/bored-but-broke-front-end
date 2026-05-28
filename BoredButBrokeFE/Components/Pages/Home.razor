@@ -8,38 +8,114 @@
 
     <div class="plan-form">
         <div class="form-question">
-            <label for="location">Enter your location</label>
+            <label for="location">Enter your location*</label>
             <input type="text" id="location" placeholder="e.g. Manchester" class="form-input" />
         </div>
 
-        <div class="form-question">
-            <label for="date">Date</label>
-            <input type="date" id="date" class="form-input" />
+        <div class="form-question-row">
+            <div class="form-question">
+                <label for="date">Date*</label>
+                <input type="date" id="date" class="form-input"
+                    min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                    max="@DateTime.Today.AddDays(16).ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="form-question">
+                <label for="time-out">From*</label>
+                <select id="time-out" class="form-input">
+                    @for (int h = 0; h < 24; h++)
+                    {
+                        <option value="@($"{h:D2}:00")">@($"{h:D2}:00")</option>
+                    }
+                </select>
+            </div>
+            <div class="form-question">
+                <label for="time-home">Until*</label>
+                <select id="time-home" class="form-input">
+                    @for (int h = 0; h < 24; h++)
+                    {
+                        <option value="@($"{h:D2}:00")">@($"{h:D2}:00")</option>
+                    }
+                </select>
+            </div>
         </div>
 
-        <div class="form-question">
-            <label for="age-range">Select an age range</label>
-            <select id="age-range" class="form-input">
-                <option value="" disabled selected>Choose an option</option>
-                <option value="under-18">Under 18</option>
-                <option value="18-30">18 to 30</option>
-                <option value="30-49">30 to 49</option>
-                <option value="50+">50+</option>
-                <option value="family">Family with children</option>
-            </select>
-        </div>
+        <div class="form-question-row">
+            <div class="form-question">
+                <label for="age-range">Select an age range*</label>
+                <select id="age-range" class="form-input">
+                    <option value="" disabled selected>Choose an option</option>
+                    <option value="under-18">Under 18</option>
+                    <option value="18-30">18 to 30</option>
+                    <option value="30-49">31 to 49</option>
+                    <option value="50+">50+</option>
+                    <option value="family">Family with children</option>
+                </select>
+            </div>
 
-        <div class="form-question">
-            <label for="budget">Select your budget</label>
-            <select id="budget" class="form-input">
-                <option value="" disabled selected>Choose a budget</option>
-                <option value="1">£</option>
-                <option value="2">££</option>
-                <option value="3">£££</option>
-                <option value="4">££££</option>
-            </select>
+            <div class="form-question">
+                <label for="budget">Select your budget</label>
+                <select id="budget" class="form-input">
+                    <option value="" disabled selected>Choose a budget</option>
+                    <option value="1">Cheap (£)</option>
+                    <option value="2">Moderate (££)</option>
+                    <option value="3">Expensive (£££)</option>
+                    <option value="4">Very Expensive (££££)</option>
+                </select>
+            </div>
         </div>
 
         <button class="btn-submit">Search</button>
+    </div>
+</div>
+
+<div class="about-mosaic">
+    <div class="mosaic-top">
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h1/400/300" alt="Day out" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h2/400/300" alt="Friends out" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h3/400/300" alt="Activities" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h4/400/300" alt="Fun on a budget" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+    </div>
+
+    <div class="mosaic-banner">
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h5/400/300" alt="Explore" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <p>Plan the perfect day out without breaking the bank.</p>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h6/400/300" alt="Adventure" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+    </div>
+
+    <div class="mosaic-bottom">
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h7/400/300" alt="Weekend plans" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h8/400/300" alt="Local activities" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h9/400/300" alt="Budget day out" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h10/400/300" alt="Having fun" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
     </div>
 </div>
