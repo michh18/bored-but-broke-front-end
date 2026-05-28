@@ -11,7 +11,7 @@ namespace BoredButBrokeFE.Components.Models
         public List<Category> Categories { get; set; } = new List<Category>();
         public Price Price { get; set; } = Price.Cheap;
         public Coordinates Coordinates { get; set; } = new Coordinates();
-        public OpeningHours OpeningHours { get; set; } = new OpeningHours(); 
+        public List<OpeningHours> OpeningHours { get; set; } = new List<OpeningHours>(); 
         public double Rating { get; set; } = 1;
         public string PlaceUrl { get; set; } = string.Empty;
         public string ImageUrl { get; set; } = string.Empty;
