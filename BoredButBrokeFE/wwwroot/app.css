@@ -255,7 +255,11 @@ h1:focus {
 .facts-text {
     flex: 0 1 420px;
     max-width: 420px;
+    height: 8rem;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .facts-text p {
