@@ -1,0 +1,21 @@
+﻿.places-results-page {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 2rem;
+    align-items: start;
+    padding: 2rem;
+}
+
+.filter-column {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+    background: #ffffff;
+    padding: 1rem;
+    border-right: 1px solid #000000;
+}
+
+.places-results {
+    width: 100%;
+    min-width:0;
+}
