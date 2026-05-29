@@ -3,7 +3,7 @@
 
 @if (Place is null) return;
 
-<div class="place-card">
+<div class="place-card" @onclick="GoToPlaceDetails">
     <div class="place-info">
         <img src="@Place.ImageUrl" alt="@Place.PlaceName"/>
         <h3>@Place.PlaceName</h3>
@@ -31,4 +31,12 @@
 @code {
     [Parameter]
     public Place Place { get; set; }
+
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+
+    private void GoToPlaceDetails()
+    {
+        navigationManager.NavigateTo($"/places/{Place.PlaceId}");
+    }
 }
