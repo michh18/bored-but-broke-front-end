@@ -15,6 +15,13 @@
     border-right: 1px solid #000000;
 }
 
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
 .places-results {
     width: 100%;
     min-width:0;
