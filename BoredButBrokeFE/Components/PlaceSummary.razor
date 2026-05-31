@@ -12,6 +12,12 @@
         </div>
         <h3>@Place.PlaceName</h3>
         <p>@string.Join(", ", Place.Location.DisplayAddress)</p>
+        <div class="category-list">
+            @foreach (var category in Place.Categories)
+            {
+                <div class="category-tag">@category.Title</div>
+            }
+        </div>
     </div>
 </div>
 
