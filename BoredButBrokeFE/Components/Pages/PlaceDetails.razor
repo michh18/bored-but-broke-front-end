@@ -1,0 +1,218 @@
+﻿@page "/places/{PlaceId:int}"
+
+@using BoredButBrokeFE.Components.Models
+
+@if (place is null)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <div class="place-details-page">
+        <div class="place-img">
+            <img src="@place.ImageUrl" alt="@place.PlaceName" />
+        </div>
+        <div class="place-content">
+            <div class="place-header">
+                <div class="place-title-section">
+                    <h1>@place.PlaceName</h1>
+
+                    <p class="place-location">
+                        📍@string.Join(", ", place.Location.DisplayAddress)
+                    </p>
+                </div>
+                
+                <div class="place-meta">
+                    <div class="meta-pill">⭐ @place.Rating</div>
+                    <div class="meta-pill">@GetPriceDisplay()</div>
+                </div>
+            </div>
+
+            <div class="places-category-and-opening-hours">
+                <div class="place-section">
+                    <h2>Categories</h2>
+
+                    <div class="category-list">
+                        @foreach (var category in place.Categories)
+                        {
+                            <div class="category-tag">@category.Title</div>
+                        }
+                    </div>
+                </div>
+
+                <div class="place-section">
+                    <h2>Opening Hours</h2>
+
+                    <div class="hours-list">
+                        @foreach (var openingHours in place.OpeningHours)
+                        {
+                            @foreach (var hour in openingHours.Hours)
+                            {
+                                <div class="hour-row">
+                                    <span>@GetDayName(hour.Day)</span>
+                                    <span>@FormatTime(hour.Start) - @FormatTime(hour.End)</span>
+                                </div>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <a class="place-link" href="@place.PlaceUrl" target="_blank">
+                Visit Website
+            </a>
+
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int PlaceId{ get; set; }
+
+    // TODO: replace the below place variable with "private Place? place;" when connecting to BE
+    private Place? place = new Place
+    {
+        PlaceId = "1",
+        PlaceName = "Tate Modern",
+        Location = new Location
+        {
+            Address1 = "Bankside",
+            City = "London",
+            ZipCode = "SE1 9TG",
+            Country = "United Kingdom",
+            State = "England",
+            DisplayAddress = new List<string>
+            {
+                "Bankside",
+                "London SE1 9TG",
+                "United Kingdom"
+            }
+        },
+        Categories = new List<Category>
+        {
+            new Category
+            {
+                Alias = "art_gallery",
+                Title = "Art Gallery"
+            },
+            new Category
+            {
+                Alias = "museum",
+                Title = "Museum"
+            }
+        },
+        Price = Price.Cheap,
+        Coordinates = new Coordinates
+        {
+            Latitude = 51.5076,
+            Longitude = -0.0994
+        },
+        OpeningHours = new List<OpeningHours>
+        {
+            new OpeningHours {
+                Hours = new List<Hour>
+                {
+                    new Hour
+                    {
+                        Day = 0,
+                        Start = "0800",
+                        End = "2300"
+                    },
+                    new Hour
+                    {
+                        Day = 1,
+                        Start = "0800",
+                        End = "2300"
+                    },
+                    new Hour
+                    {
+                        Day = 2,
+                        Start = "0800",
+                        End = "2300"
+                    },
+                    new Hour
+                    {
+                        Day = 3,
+                        Start = "0800",
+                        End = "2300"
+                    },
+                    new Hour
+                    {
+                        Day = 4,
+                        Start = "0800",
+                        End = "0000"
+                    },
+                    new Hour
+                    {
+                        Day = 5,
+                        Start = "0900",
+                        End = "0000"
+                    },
+                    new Hour
+                    {
+                        Day = 6,
+                        Start = "0900",
+                        End = "2300"
+                    }
+                },
+                HoursType = "REGULAR",
+                IsOpenNow = true
+            }
+        },
+        Rating = 4.8,
+        PlaceUrl = "https://www.tate.org.uk/visit/tate-modern",
+        ImageUrl = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"
+    };
+
+    private string GetPriceDisplay()
+    {
+        return place?.Price switch
+        {
+            Price.Cheap => "£",
+            Price.Moderate => "££",
+            Price.Expensive => "£££",
+            Price.VeryExpensive => "££££",
+            _ => ""
+        };
+    }
+
+    private string GetDayName(int day)
+    {
+        return day switch
+        {
+            0 => "Monday",
+            1 => "Tuesday",
+            2 => "Wednesday",
+            3 => "Thursday",
+            4 => "Friday",
+            5 => "Saturday",
+            6 => "Sunday",
+            _ => ""
+        };
+    }
+
+    private string FormatTime(string time)
+    {
+        if (string.IsNullOrWhiteSpace(time) || time.Length != 4)
+        {
+            return time;
+        }
+        return $"{time[0..2]}:{time[2..4]}";
+    }
+
+    // TODO: uncomment when connecting to BE
+    // private HttpClient http = new HttpClient();
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     try
+    //     {
+    //         place = await http.GetFromJsonAsync<Place>($"https:localhost:5001/api/places/{PlaceId}"); // replace url 
+    //     }
+    //     catch
+    //     {
+    //         place = null;
+    //     }
+    // }
+}
