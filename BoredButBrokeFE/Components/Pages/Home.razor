@@ -62,7 +62,7 @@
                 </div>
                 <div class="form-question">
                     <label for="start-time">From</label>
-                    <select id="start-time" class="form-input" @bind="startTime">
+                    <select id="start-time" class="form-input" @bind="StartTime">
                         @for (int h = 0; h < 24; h++)
                         {
                             <option value="@($"{h:D2}:00")">@($"{h:D2}:00")</option>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="form-question">
                     <label for="end-time">Until</label>
-                    <select id="end-time" class="form-input" @bind="endTime">
+                    <select id="end-time" class="form-input" @bind="EndTime">
                         @for (int h = 0; h < 24; h++)
                         {
                             <option value="@($"{h:D2}:00")">@($"{h:D2}:00")</option>
