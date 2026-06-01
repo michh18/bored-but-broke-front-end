@@ -6,6 +6,11 @@ h1, h2, h3, h4, h5, h6 {
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    color: #1E293B;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #0F172A;
 }
 
 a, .btn-link {
@@ -23,7 +28,9 @@ a, .btn-link {
 }
 
 .content {
-    padding-top: 1.1rem;
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 h1:focus {
@@ -54,4 +61,108 @@ h1:focus {
 
 .darker-border-checkbox.form-check-input {
     border-color: #929292;
+}
+
+.about-mosaic {
+    width: 100vw;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    overflow: hidden;
+    background: linear-gradient(135deg, #FB7185 40%, #60A5FA);
+    padding: 1rem;
+    box-sizing: border-box;
+    margin-top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.mosaic-top,
+.mosaic-banner,
+.mosaic-bottom {
+    display: flex;
+    width: 100%;
+    gap: 1rem;
+    box-sizing: border-box;
+}
+
+.mosaic-img-wrapper {
+    flex: 1;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    height: 220px;
+}
+
+.mosaic-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: filter 0.3s ease;
+}
+
+.mosaic-img-wrapper:hover img {
+    filter: brightness(50%);
+    transform: scale(1.10);
+    transition: filter 0.5s ease, transform 0.5s ease;
+}
+
+.mosaic-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.mosaic-img-wrapper:hover .mosaic-overlay {
+    opacity: 1;
+}
+
+.mosaic-overlay span {
+    color: #ffffff;
+    font-size: 1rem;
+    font-weight: 600;
+    text-align: center;
+    padding: 0 1rem;
+}
+
+.mosaic-banner p {
+    flex: 2;
+    color: #ffffff;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 0;
+    line-height: 1.3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.page-content {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    background-color: #ffffff;
+}
+
+.page-content h1 {
+    color: #0F172A;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.page-content p {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #1E293B;
+    margin-bottom: 1.25rem;
 }

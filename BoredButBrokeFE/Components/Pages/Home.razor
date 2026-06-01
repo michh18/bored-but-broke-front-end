@@ -2,101 +2,193 @@
 @inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Bored But Broke</PageTitle>
+<HeadContent>
+    <link rel="stylesheet" href="css/home.css" />
+</HeadContent>
 
-<div class="plan-form">
-    <div class="form-question">
-        <label for="location">Enter your location</label>
-        <input type="text" id="location" placeholder="e.g. Manchester" class="form-input" @bind="Location" required/>
-    </div>
-
-    <div class="form-question">
-        <label for="radius">Distance</label>
-        <select id="radius" class="form-input" @bind="Radius">
-            <option value="1609">1 mile</option>
-            <option value="4828">3 miles</option>
-            <option value="8047">5 miles</option>
-            <option value="16093">10 miles</option>
-            <option value="24140">15 miles</option>
-        </select>
-    </div>
-
-    <div class="form-question-row">
-        <div class="form-question date-field">
-            <label for="date">Date</label>
-            <input type="date" id="date" class="form-input"
-                min="@DateTime.Today.ToString("yyyy-MM-dd")"
-                max="@DateTime.Today.AddDays(16).ToString("yyyy-MM-dd")"
-                   @bind="SelectedDate" required />
+<div class="hero-layout">
+    <div class="hero-left">
+        <div class="hero-heading">
+            It's okay to be broke.<br />
+            <span class="hero-heading-highlight">But it's not okay to be bored.</span>
         </div>
-        <div class="form-question">
-            <label for="start-time">From</label>
-            <select id="start-time" class="form-input" @bind="startTime">
-                @for (int h = 0; h < 24; h++)
-                {
-                    <option value="@($"{h:D2}:00")">@($"{h:D2}:00")</option>
-                }
-            </select>
-        </div>
-        <div class="form-question">
-            <label for="end-time">Until</label>
-            <select id="end-time" class="form-input" @bind="endTime">
-                @for (int h = 0; h < 24; h++)
-                {
-                    <option value="@($"{h:D2}:00")">@($"{h:D2}:00")</option>
-                }
-            </select>
+        <p class="hero-description">
+            Tell us where you are, how long you have, and what you're comfortable with spending. We'll take care of the rest and build you a full day plan around the weather.
+        </p>
+        <div class="hero-stats">
+            <div class="hero-stat">
+                <span class="stat-number stat-pink">100M+</span>
+                <span class="stat-label">Places to Explore</span>
+            </div>
+            <div class="hero-stat">
+                <span class="stat-number stat-blue">16-Day</span>
+                <span class="stat-label">Weather Forecast</span>
+            </div>
+            <div class="hero-stat">
+                <span class="stat-number stat-gold">Free</span>
+                <span class="stat-label">Always</span>
+            </div>
         </div>
     </div>
 
-    <div class="form-question">
-        <label>Categories</label>
-        <div class="category-chips">
-            @foreach (var cat in TopLevelCategories)
+    <div class="hero-right">
+        <h1>Are you bored but broke?</h1>
+        <p class="tagline">Tell us a bit about yourself and we will plan your perfect day out.</p>
+        <div class="plan-form">
+            <div class="form-question">
+                <label for="location">Enter your location</label>
+                <input type="text" id="location" placeholder="e.g. Manchester" class="form-input" @bind="Location" required />
+            </div>
+
+            <div class="form-question">
+                <label for="radius">Distance</label>
+                <select id="radius" class="form-input" @bind="Radius">
+                    <option value="1609">1 mile</option>
+                    <option value="4828">3 miles</option>
+                    <option value="8047">5 miles</option>
+                    <option value="16093">10 miles</option>
+                    <option value="24140">15 miles</option>
+                </select>
+            </div>
+
+            <div class="form-question-row">
+                <div class="form-question date-field">
+                    <label for="date">Date*</label>
+                    <input type="date" id="date" class="form-input"
+                        min="@DateTime.Today.ToString("yyyy-MM-dd")"
+                        max="@DateTime.Today.AddDays(16).ToString("yyyy-MM-dd")"
+                        @bind="SelectedDate" />
+                </div>
+                <div class="form-question">
+                    <label for="start-time">From</label>
+                    <select id="start-time" class="form-input" @bind="startTime">
+                        @for (int h = 0; h < 24; h++)
+                        {
+                            <option value="@($"{h:D2}:00")">@($"{h:D2}:00")</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-question">
+                    <label for="end-time">Until</label>
+                    <select id="end-time" class="form-input" @bind="endTime">
+                        @for (int h = 0; h < 24; h++)
+                        {
+                            <option value="@($"{h:D2}:00")">@($"{h:D2}:00")</option>
+                        }
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-question">
+                <label>Categories</label>
+                <div class="category-chips">
+                    @foreach (var cat in TopLevelCategories)
+                    {
+                        <button type="button"
+                                class="chip @(SelectedCategories.Contains(cat) ? "chip-selected" : "")"
+                                @onclick="() => ToggleCategory(cat)">
+                            @cat
+                        </button>
+                    }
+                </div>
+            </div>
+
+            <div class="form-question-row">
+                <div class="form-question">
+                    <label for="age-range">Select an age range</label>
+                    <select id="age-range" class="form-input" @bind="AgeRange" required>
+                        <option value="" disabled selected>Choose an option</option>
+                        <option value="under-18">Under 18</option>
+                        <option value="18-30">18 to 30</option>
+                        <option value="30-49">31 to 49</option>
+                        <option value="50+">50+</option>
+                        <option value="family">Family with children</option>
+                    </select>
+                </div>
+                <div class="form-question">
+                    <label for="budget">Select your budget</label>
+                    <select id="budget" class="form-input" @bind="Budget" required>
+                        <option value="" disabled selected>Choose a budget</option>
+                        <option value="1">Cheap (£)</option>
+                        <option value="2">Moderate (££)</option>
+                        <option value="3">Expensive (£££)</option>
+                        <option value="4">Very Expensive (££££)</option>
+                    </select>
+                </div>
+            </div>
+
+            @if (validationErrors.Any())
             {
-                <button type="button"
-                        class="chip @(SelectedCategories.Contains(cat) ? "chip-selected" : "")"
-                        @onclick="() => ToggleCategory(cat)">
-                    @cat
-                </button>
+                <ul class="validation-errors">
+                    @foreach (var error in validationErrors)
+                    {
+                        <li>@error</li>
+                    }
+                </ul>
             }
+            <button class="btn-submit" @onclick="HandleSearch">Search</button>
+        </div>
+    </div>
+</div>
+
+<div class="about-mosaic">
+    <div class="mosaic-top">
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h1/400/300" alt="Day out" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h2/400/300" alt="Friends out" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h3/400/300" alt="Activities" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h4/400/300" alt="Fun on a budget" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
         </div>
     </div>
 
-    <div class="form-question-row">
-        <div class="form-question">
-            <label for="age-range">Select an age range</label>
-            <select id="age-range" class="form-input" @bind="AgeRange" required>
-                <option value="" disabled selected>Choose an option</option>
-                <option value="under-18">Under 18</option>
-                <option value="18-30">18 to 30</option>
-                <option value="30-49">31 to 49</option>
-                <option value="50+">50+</option>
-                <option value="family">Family with children</option>
-            </select>
+    <div class="mosaic-banner">
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h5/400/300" alt="Explore" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
         </div>
-        <div class="form-question">
-            <label for="budget">Select your budget</label>
-            <select id="budget" class="form-input" @bind="Budget" required>
-                <option value="" disabled selected>Choose a budget</option>
-                <option value="1">Cheap (£)</option>
-                <option value="2">Moderate (££)</option>
-                <option value="3">Expensive (£££)</option>
-                <option value="4">Very Expensive (££££)</option>
-            </select>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h11/400/300" alt="Day trip" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h12/400/300" alt="Outing" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h6/400/300" alt="Adventure" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
         </div>
     </div>
 
-    @if (validationErrors.Any())
-    {
-        <ul class="validation-errors">
-            @foreach (var error in validationErrors)
-            {
-                <li>@error</li>
-            }
-        </ul>
-    }
-    <button class="btn-submit" @onclick="HandleSearch">Search</button>
+    <div class="mosaic-bottom">
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h7/400/300" alt="Weekend plans" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h8/400/300" alt="Local activities" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h9/400/300" alt="Budget day out" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+        <div class="mosaic-img-wrapper">
+            <img src="https://picsum.photos/seed/h10/400/300" alt="Having fun" />
+            <div class="mosaic-overlay"><span>Your text here</span></div>
+        </div>
+    </div>
 </div>
 
 @code{
