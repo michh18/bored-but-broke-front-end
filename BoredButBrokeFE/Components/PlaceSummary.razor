@@ -1,0 +1,42 @@
+﻿@using BoredButBrokeFE.Components.Models
+@rendermode InteractiveServer
+
+@if (Place is null) return;
+
+<div class="place-card" @onclick="GoToPlaceDetails">
+    <div class="place-info">
+        <img src="@Place.ImageUrl" alt="@Place.PlaceName"/>
+        <h3>@Place.PlaceName</h3>
+        <p>@string.Join(", ", Place.Location.DisplayAddress)</p>
+        <p>⭐@Place.Rating</p>
+        @if (Place.Price == Price.Cheap)
+        {
+            <p>£</p>
+        }
+        else if (@Place.Price == Price.Moderate)
+        {
+            <p>££</p>
+        }
+        else if (@Place.Price == Price.Expensive)
+        {
+            <p>£££</p>
+        }
+        else if (@Place.Price == Price.VeryExpensive)
+        {
+            <p>££££</p>
+        }
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public Place Place { get; set; }
+
+    [Inject]
+    private NavigationManager navigationManager { get; set; }
+
+    private void GoToPlaceDetails()
+    {
+        navigationManager.NavigateTo($"/places/{Place.PlaceId}");
+    }
+}
