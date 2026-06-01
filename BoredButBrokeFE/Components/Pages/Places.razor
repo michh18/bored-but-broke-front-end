@@ -124,6 +124,9 @@ else
         if (!string.IsNullOrWhiteSpace(TimeHome))
             queryParams["endTime"] = TimeHome;
 
+        if (!string.IsNullOrWhiteSpace(AgeRange))
+            queryParams["ageRange"] = AgeRange;
+
         if (!string.IsNullOrWhiteSpace(Budget))
             queryParams["budget"] = Budget;
 
