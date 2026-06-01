@@ -20,43 +20,31 @@ else
                 <h4>Categories</h4>
                 @foreach (var category in VisibleCategories)
                 {
-                                <label class="filter-option">
-                                    <input type="checkbox"
-                                            checked="@selectedCategories.Contains(category)"
-                                            @onchange="() => ToggleCategory(category)" />
-                                    <span>@category</span>
-                                </label>
+                    <label class="filter-option">
+                        <input type="checkbox"
+                                checked="@selectedCategories.Contains(category)"
+                                @onchange="() => ToggleCategory(category)" />
+                        <span>@category</span>
+                    </label>
                 }
                 @if (AvailableCategories.Count > CategoryPreviewCount)
                 {
                     <button type="button" class="view-more-btn" @onclick="ToggleShowAllCategories">
                         @(ShowAllCategories ? "View less" : $"View {AvailableCategories.Count - CategoryPreviewCount} more...")
-                </button>
+                    </button>
                 }
             </div>
 
             <div class="filter-section">
                 <h4>Price</h4>
-            
-                <label class="filter-option">
-                    <InputCheckbox @bind-Value="CheapSelected" @bind-Value:after="ApplyFilters" />
-                    <span>Cheap (£)</span>
-                </label>
 
-                <label class="filter-option">
-                    <InputCheckbox @bind-Value="ModerateSelected" @bind-Value:after="ApplyFilters" />
-                    <span>Moderate (££)</span>
-                </label>
-
-                <label class="filter-option">
-                    <InputCheckbox @bind-Value="ExpensiveSelected" @bind-Value:after="ApplyFilters" />
-                    <span>Expensive (£££)</span>
-                </label>
-
-                <label class="filter-option">
-                    <InputCheckbox @bind-Value="VeryExpensiveSelected" @bind-Value:after="ApplyFilters" />
-                    <span>Very Expensive (££££)</span>
-                </label>
+                @foreach (var price in AvailablePrices)
+                {
+                    <label class="filter-option">
+                        <input type="checkbox" checked="@selectedPrices.Contains(price)" @onchange="() => TogglePrice(price)" />
+                        <span>@PriceLabel(price)</span>
+                    </label>
+                }
             </div>
         </div>
 
@@ -81,10 +69,32 @@ else
     [SupplyParameterFromQuery]
     public string Budget { get; set; }
 
-    private bool CheapSelected;
-    private bool ModerateSelected;
-    private bool ExpensiveSelected;
-    private bool VeryExpensiveSelected;
+    private HashSet<Price> selectedPrices { get; set; } = new();
+
+    private List<Price> AvailablePrices => AllPlaces
+        .Select(p => p.Price)
+        .Distinct()
+        .OrderBy(p => p)
+        .ToList();
+
+    private void TogglePrice(Price price)
+    {
+        if (selectedPrices.Contains(price))
+            selectedPrices.Remove(price);
+        else
+            selectedPrices.Add(price);
+
+        ApplyFilters();
+    }
+
+    private static string PriceLabel(Price price) => price switch
+    {
+        Price.Cheap => "Cheap (£)",
+        Price.Moderate => "Moderate (££)",
+        Price.Expensive => "Expensive (£££)",
+        Price.VeryExpensive => "Very Expensive (££££)",
+        _ => price.ToString()
+    };
 
     private List<Place> AllPlaces { get; set; } = new();
     private List<Place> FilteredPlaces { get; set; } = new();
@@ -115,9 +125,7 @@ else
             queryParams["endTime"] = TimeHome;
 
         if (!string.IsNullOrWhiteSpace(Budget))
-        {
             queryParams["budget"] = Budget;
-        }
 
         var queryString = string.Join("&", queryParams.Select(kv =>
             $"{Uri.EscapeDataString(kv.Key)}={Uri.EscapeDataString(kv.Value)}"));
@@ -153,18 +161,10 @@ else
 
     private void ApplyFilters()
     {
-        var selectedPrices = new List<Price>();
-
-        if (CheapSelected) selectedPrices.Add(Price.Cheap);
-        if (ModerateSelected) selectedPrices.Add(Price.Moderate);
-        if (ExpensiveSelected) selectedPrices.Add(Price.Expensive);
-        if (VeryExpensiveSelected) selectedPrices.Add(Price.VeryExpensive);
 
         FilteredPlaces = AllPlaces
-            .Where(p =>
-                (selectedPrices.Count == 0 || selectedPrices.Contains(p.Price)) &&
-                (selectedCategories.Count == 0 || p.Categories.Any(c => selectedCategories.Contains(c.Title)))
-            )
+            .Where(p => (selectedPrices.Count == 0 || selectedPrices.Contains(p.Price)) &&
+                (selectedCategories.Count == 0 || p.Categories.Any(c => selectedCategories.Contains(c.Title))))
             .ToList();
     }
 }
