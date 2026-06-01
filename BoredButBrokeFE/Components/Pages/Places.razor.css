@@ -1,9 +1,9 @@
 ﻿.places-results-page {
     display: grid;
-    grid-template-columns: 260px 1fr;
+    grid-template-columns: 200px 1fr;
     gap: 2rem;
     align-items: start;
-    padding: 2rem;
+    padding: 1rem;
 }
 
 .filter-column {
@@ -11,8 +11,15 @@
     top: 2rem;
     height: fit-content;
     background: #ffffff;
-    padding: 1rem;
+    padding: 0.7rem;
     border-right: 1px solid #000000;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
 }
 
 .places-results {

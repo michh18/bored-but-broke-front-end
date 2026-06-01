@@ -1,22 +1,170 @@
 ﻿@page "/places"
 
+@using BoredButBrokeFE.Components.Models
+@inject HttpClient Http
+@rendermode InteractiveServer
+
 <PageTitle>Places</PageTitle>
 
-<h1>Found Results</h1>
+@if (IsLoading)
+{
+    <p>Finding places for you...</p>
+}
+else
+{
+    <div class="places-results-page">
+        <div class="filter-column">
+            <h3 class="filter-title">Filters</h3>
 
-<div class="places-results-page">
-    <div class="filter-column">
-        <h4>Filters</h4>
-        <p>Category</p>
-        <p>Location</p>
-        <p>Price</p>
+            <div class="filter-section">
+                <h4>Categories</h4>
+                @foreach (var category in VisibleCategories)
+                {
+                                <label class="filter-option">
+                                    <input type="checkbox"
+                                            checked="@selectedCategories.Contains(category)"
+                                            @onchange="() => ToggleCategory(category)" />
+                                    <span>@category</span>
+                                </label>
+                }
+                @if (AvailableCategories.Count > CategoryPreviewCount)
+                {
+                    <button type="button" class="view-more-btn" @onclick="ToggleShowAllCategories">
+                        @(ShowAllCategories ? "View less" : $"View {AvailableCategories.Count - CategoryPreviewCount} more...")
+                </button>
+                }
+            </div>
 
+            <div class="filter-section">
+                <h4>Price</h4>
+            
+                <label class="filter-option">
+                    <InputCheckbox @bind-Value="CheapSelected" @bind-Value:after="ApplyFilters" />
+                    <span>Cheap (£)</span>
+                </label>
+
+                <label class="filter-option">
+                    <InputCheckbox @bind-Value="ModerateSelected" @bind-Value:after="ApplyFilters" />
+                    <span>Moderate (££)</span>
+                </label>
+
+                <label class="filter-option">
+                    <InputCheckbox @bind-Value="ExpensiveSelected" @bind-Value:after="ApplyFilters" />
+                    <span>Expensive (£££)</span>
+                </label>
+
+                <label class="filter-option">
+                    <InputCheckbox @bind-Value="VeryExpensiveSelected" @bind-Value:after="ApplyFilters" />
+                    <span>Very Expensive (££££)</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="places-results">
+            <h1>Found Results</h1>
+            <PlaceSummaryList Places="FilteredPlaces"/>
+        </div>
     </div>
-    <div class="places-results">
-        <PlaceSummaryList />
-    </div>
-</div>
+}
 
 @code {
+    [SupplyParameterFromQuery]
+    public string Location { get; set; } 
+    [SupplyParameterFromQuery]
+    public DateTime? SelectedDate { get; set; }
+    [SupplyParameterFromQuery]
+    public string TimeOut { get; set; }
+    [SupplyParameterFromQuery]
+    public string TimeHome { get; set; }
+    [SupplyParameterFromQuery]
+    public string AgeRange { get; set; }
+    [SupplyParameterFromQuery]
+    public string Budget { get; set; }
 
+    private bool CheapSelected;
+    private bool ModerateSelected;
+    private bool ExpensiveSelected;
+    private bool VeryExpensiveSelected;
+
+    private List<Place> AllPlaces { get; set; } = new();
+    private List<Place> FilteredPlaces { get; set; } = new();
+    private bool IsLoading { get; set; } = true;
+
+    private List<string> AvailableCategories =>
+        AllPlaces.SelectMany(p => p.Categories)
+                    .Select(c => c.Title)
+                    .Distinct()
+                    .ToList();
+
+    private HashSet<string> selectedCategories { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        var queryParams = new Dictionary<string, string>();
+
+        if (!string.IsNullOrWhiteSpace(Location))
+            queryParams["location"] = Location;
+
+        if (SelectedDate.HasValue)
+            queryParams["date"] = DateOnly.FromDateTime(SelectedDate.Value).ToString("yyyy-MM-dd");
+
+        if (!string.IsNullOrWhiteSpace(TimeOut))
+            queryParams["startTime"] = TimeOut;
+
+        if (!string.IsNullOrWhiteSpace(TimeHome))
+            queryParams["endTime"] = TimeHome;
+
+        if (!string.IsNullOrWhiteSpace(Budget))
+        {
+            queryParams["budget"] = Budget;
+        }
+
+        var queryString = string.Join("&", queryParams.Select(kv =>
+            $"{Uri.EscapeDataString(kv.Key)}={Uri.EscapeDataString(kv.Value)}"));
+
+        AllPlaces = await Http.GetFromJsonAsync<List<Place>>($"api/places?{queryString}")
+                   ?? new List<Place>();
+
+        ApplyFilters();
+        IsLoading = false;
+    }
+
+    private const int CategoryPreviewCount = 5;
+    private bool ShowAllCategories { get; set; } = false;
+
+    private List<string> VisibleCategories =>
+        ShowAllCategories
+            ? AvailableCategories
+            : AvailableCategories.Take(CategoryPreviewCount).ToList();
+    
+    private void ToggleCategory(string category)
+    {
+        if (selectedCategories.Contains(category))
+            selectedCategories.Remove(category);
+        else
+            selectedCategories.Add(category);
+
+        ApplyFilters();
+    }
+    private void ToggleShowAllCategories()
+    {
+        ShowAllCategories = !ShowAllCategories;
+    }
+
+    private void ApplyFilters()
+    {
+        var selectedPrices = new List<Price>();
+
+        if (CheapSelected) selectedPrices.Add(Price.Cheap);
+        if (ModerateSelected) selectedPrices.Add(Price.Moderate);
+        if (ExpensiveSelected) selectedPrices.Add(Price.Expensive);
+        if (VeryExpensiveSelected) selectedPrices.Add(Price.VeryExpensive);
+
+        FilteredPlaces = AllPlaces
+            .Where(p =>
+                (selectedPrices.Count == 0 || selectedPrices.Contains(p.Price)) &&
+                (selectedCategories.Count == 0 || p.Categories.Any(c => selectedCategories.Contains(c.Title)))
+            )
+            .ToList();
+    }
 }
