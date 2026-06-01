@@ -1,4 +1,5 @@
 ﻿@page "/"
+@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
 
 <PageTitle>Bored But Broke</PageTitle>
@@ -36,8 +37,19 @@
         <p class="tagline">Tell us a bit about yourself and we will plan your perfect day out.</p>
         <div class="plan-form">
             <div class="form-question">
-                <label for="location">Enter your location*</label>
-                <input type="text" id="location" placeholder="e.g. Manchester" class="form-input" @bind="Location" />
+                <label for="location">Enter your location</label>
+                <input type="text" id="location" placeholder="e.g. Manchester" class="form-input" @bind="Location" required />
+            </div>
+
+            <div class="form-question">
+                <label for="radius">Distance</label>
+                <select id="radius" class="form-input" @bind="Radius">
+                    <option value="1609">1 mile</option>
+                    <option value="4828">3 miles</option>
+                    <option value="8047">5 miles</option>
+                    <option value="16093">10 miles</option>
+                    <option value="24140">15 miles</option>
+                </select>
             </div>
 
             <div class="form-question-row">
@@ -49,8 +61,8 @@
                         @bind="SelectedDate" />
                 </div>
                 <div class="form-question">
-                    <label for="time-out">From</label>
-                    <select id="time-out" class="form-input" @bind="TimeOut">
+                    <label for="start-time">From</label>
+                    <select id="start-time" class="form-input" @bind="startTime">
                         @for (int h = 0; h < 24; h++)
                         {
                             <option value="@($"{h:D2}:00")">@($"{h:D2}:00")</option>
@@ -58,8 +70,8 @@
                     </select>
                 </div>
                 <div class="form-question">
-                    <label for="time-home">Until</label>
-                    <select id="time-home" class="form-input" @bind="TimeHome">
+                    <label for="end-time">Until</label>
+                    <select id="end-time" class="form-input" @bind="endTime">
                         @for (int h = 0; h < 24; h++)
                         {
                             <option value="@($"{h:D2}:00")">@($"{h:D2}:00")</option>
@@ -68,10 +80,24 @@
                 </div>
             </div>
 
+            <div class="form-question">
+                <label>Categories</label>
+                <div class="category-chips">
+                    @foreach (var cat in TopLevelCategories)
+                    {
+                        <button type="button"
+                                class="chip @(SelectedCategories.Contains(cat) ? "chip-selected" : "")"
+                                @onclick="() => ToggleCategory(cat)">
+                            @cat
+                        </button>
+                    }
+                </div>
+            </div>
+
             <div class="form-question-row">
                 <div class="form-question">
-                    <label for="age-range">Select an age range*</label>
-                    <select id="age-range" class="form-input" @bind="AgeRange">
+                    <label for="age-range">Select an age range</label>
+                    <select id="age-range" class="form-input" @bind="AgeRange" required>
                         <option value="" disabled selected>Choose an option</option>
                         <option value="under-18">Under 18</option>
                         <option value="18-30">18 to 30</option>
@@ -82,7 +108,7 @@
                 </div>
                 <div class="form-question">
                     <label for="budget">Select your budget</label>
-                    <select id="budget" class="form-input" @bind="Budget">
+                    <select id="budget" class="form-input" @bind="Budget" required>
                         <option value="" disabled selected>Choose a budget</option>
                         <option value="1">Cheap (£)</option>
                         <option value="2">Moderate (££)</option>
@@ -92,6 +118,15 @@
                 </div>
             </div>
 
+            @if (validationErrors.Any())
+            {
+                <ul class="validation-errors">
+                    @foreach (var error in validationErrors)
+                    {
+                        <li>@error</li>
+                    }
+                </ul>
+            }
             <button class="btn-submit" @onclick="HandleSearch">Search</button>
         </div>
     </div>
@@ -156,19 +191,93 @@
     </div>
 </div>
 
-@code {
+@code{
     private string Location { get; set; } = string.Empty;
+    private int Radius { get; set; } = 8047;
     private DateTime? SelectedDate { get; set; }
-    private string TimeOut { get; set; } = "09:00";
-    private string TimeHome { get; set; } = "17:00";
+    private string startTime { get; set; } = "00:00";
+    private string endTime { get; set; } = "23:00";
     private string AgeRange { get; set; } = string.Empty;
     private string Budget { get; set; } = string.Empty;
 
+    private static readonly List<string> TopLevelCategories = new()
+    {
+        "Arts & Entertainment",
+        "Active Life",
+        "Food",
+        "Nightlife",
+        "Restaurants",
+        "Shopping",
+        "Beauty & Spas",
+        "Health & Medical",
+        "Hotels & Travel",
+        "Local Services"
+    };
+
+    private HashSet<string> SelectedCategories { get; set; } = new();
+
+    private void ToggleCategory(string category)
+    {
+        if (SelectedCategories.Contains(category))
+            SelectedCategories.Remove(category);
+        else
+            SelectedCategories.Add(category);
+    }
+
+    private List<string> validationErrors { get; set; } = new();
+
     private void HandleSearch()
     {
-        Console.WriteLine($"Location: {Location}");
-        Console.WriteLine($"Date: {SelectedDate}");
-        Console.WriteLine($"From: {TimeOut}, Until: {TimeHome}");
-        Console.WriteLine($"Age Range: {AgeRange}, Budget: {Budget}");
+        validationErrors.Clear();
+
+        if (string.IsNullOrWhiteSpace(Location))
+        {
+            validationErrors.Add("Please enter a location.");
+        }
+
+        if (SelectedDate == null)
+        {
+            validationErrors.Add("Please select a date.");
+        }
+
+        if (string.IsNullOrWhiteSpace(AgeRange))
+        {
+            validationErrors.Add("Please select an age range.");
+        }
+
+        if (string.IsNullOrWhiteSpace(Budget))
+        {
+            validationErrors.Add("Please select a budget.");
+        }
+
+        if (TimeSpan.TryParse(endTime, out var end) &&
+            TimeSpan.TryParse(startTime, out var start) &&
+            end <= start)
+        {
+            validationErrors.Add("End time must be after start time.");
+        }
+
+        if (!SelectedCategories.Any())
+            validationErrors.Add("Please select at least one category.");
+
+        if (validationErrors.Any())
+            return;
+
+        int budgetInt = int.Parse(Budget);
+        string budgetParam = string.Join(",", Enumerable.Range(1, budgetInt));
+
+        string categoriesParam = Uri.EscapeDataString(string.Join(",", SelectedCategories));
+
+
+        string url = $"/places?location={Location}" +
+                  $"&radius={Radius}" +
+                  $"&categories={categoriesParam}" +
+                  $"&date={SelectedDate:yyyy-MM-dd}" +
+                  $"&startTime={startTime}" +
+                  $"&endTime={endTime}" +
+                  $"&ageRange={AgeRange}" +
+                  $"&budget={budgetParam}";
+
+        NavigationManager.NavigateTo(url);
     }
 }

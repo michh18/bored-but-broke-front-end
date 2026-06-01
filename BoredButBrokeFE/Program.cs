@@ -8,6 +8,11 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents()
     .AddInteractiveWebAssemblyComponents();
 
+builder.Services.AddScoped(sp => new HttpClient
+{
+    BaseAddress = new Uri("https://localhost:7141/")
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
