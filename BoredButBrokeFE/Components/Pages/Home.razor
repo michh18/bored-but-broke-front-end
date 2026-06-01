@@ -62,7 +62,7 @@
                 </div>
                 <div class="form-question">
                     <label for="start-time">From</label>
-                    <select id="start-time" class="form-input" @bind="startTime">
+                    <select id="start-time" class="form-input" @bind="StartTime">
                         @for (int h = 0; h < 24; h++)
                         {
                             <option value="@($"{h:D2}:00")">@($"{h:D2}:00")</option>
@@ -71,7 +71,7 @@
                 </div>
                 <div class="form-question">
                     <label for="end-time">Until</label>
-                    <select id="end-time" class="form-input" @bind="endTime">
+                    <select id="end-time" class="form-input" @bind="EndTime">
                         @for (int h = 0; h < 24; h++)
                         {
                             <option value="@($"{h:D2}:00")">@($"{h:D2}:00")</option>
@@ -195,8 +195,8 @@
     private string Location { get; set; } = string.Empty;
     private int Radius { get; set; } = 8047;
     private DateTime? SelectedDate { get; set; }
-    private string startTime { get; set; } = "00:00";
-    private string endTime { get; set; } = "23:00";
+    private string StartTime { get; set; } = "00:00";
+    private string EndTime { get; set; } = "23:00";
     private string AgeRange { get; set; } = string.Empty;
     private string Budget { get; set; } = string.Empty;
 
@@ -250,8 +250,8 @@
             validationErrors.Add("Please select a budget.");
         }
 
-        if (TimeSpan.TryParse(endTime, out var end) &&
-            TimeSpan.TryParse(startTime, out var start) &&
+        if (TimeSpan.TryParse(EndTime, out var end) &&
+            TimeSpan.TryParse(StartTime, out var start) &&
             end <= start)
         {
             validationErrors.Add("End time must be after start time.");
@@ -263,20 +263,17 @@
         if (validationErrors.Any())
             return;
 
-        int budgetInt = int.Parse(Budget);
-        string budgetParam = string.Join(",", Enumerable.Range(1, budgetInt));
-
         string categoriesParam = Uri.EscapeDataString(string.Join(",", SelectedCategories));
 
 
         string url = $"/places?location={Location}" +
                   $"&radius={Radius}" +
-                  $"&categories={categoriesParam}" +
+                  $"&categories={categoriesParam}" + 
                   $"&date={SelectedDate:yyyy-MM-dd}" +
-                  $"&startTime={startTime}" +
-                  $"&endTime={endTime}" +
+                  $"&startTime={StartTime}" +
+                  $"&endTime={EndTime}" +
                   $"&ageRange={AgeRange}" +
-                  $"&budget={budgetParam}";
+                  $"&budget={Budget}";
 
         NavigationManager.NavigateTo(url);
     }
