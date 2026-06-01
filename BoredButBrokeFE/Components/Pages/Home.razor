@@ -263,20 +263,17 @@
         if (validationErrors.Any())
             return;
 
-        int budgetInt = int.Parse(Budget);
-        string budgetParam = string.Join(",", Enumerable.Range(1, budgetInt));
-
         string categoriesParam = Uri.EscapeDataString(string.Join(",", SelectedCategories));
 
 
         string url = $"/places?location={Location}" +
                   $"&radius={Radius}" +
-                  $"&categories={categoriesParam}" +
+                  $"&categories={categoriesParam}" + 
                   $"&date={SelectedDate:yyyy-MM-dd}" +
                   $"&startTime={StartTime}" +
                   $"&endTime={EndTime}" +
-                  // $"&ageRange={AgeRange}" +
-                  $"&budget={budgetParam}";
+                  $"&ageRange={AgeRange}" +
+                  $"&budget={Budget}";
 
         NavigationManager.NavigateTo(url);
     }
