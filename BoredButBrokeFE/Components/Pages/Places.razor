@@ -1,12 +1,20 @@
 ﻿@page "/places"
 
 @using BoredButBrokeFE.Components.Models
+@using System.Text.Json
+@using System.Text.Json.Serialization
 @inject HttpClient Http
 @rendermode InteractiveServer
 
 <PageTitle>Places</PageTitle>
 
-@if (IsLoading)
+@if (IsError)
+{
+    <p>Error</p>
+    <p>@Error.Title</p>
+    <p>@Error.Detail</p>
+}
+else if (IsLoading)
 {
     <p>Finding places for you...</p>
 }
@@ -110,6 +118,16 @@ else
     private List<Place> AllPlaces { get; set; } = new();
     private List<Place> FilteredPlaces { get; set; } = new();
     private bool IsLoading { get; set; } = true;
+    private bool IsError { get; set; } = false;
+    private ErrorResponse Error { get; set; } = new();
+    private record ErrorResponse
+    {
+        [JsonPropertyName("title")]
+        public string? Title { get; set; }
+
+        [JsonPropertyName("detail")]
+        public string? Detail { get; set; }
+    }
 
     private List<string> AvailableCategories =>
         AllPlaces.SelectMany(p => p.Categories)
@@ -142,8 +160,20 @@ else
 
         var queryString = string.Join("&", queryParams.Select(kv =>
             $"{Uri.EscapeDataString(kv.Key)}={Uri.EscapeDataString(kv.Value)}"));
-        AllPlaces = await Http.GetFromJsonAsync<List<Place>>($"api/places?{queryString}")
+
+        var response = await Http.GetAsync($"api/places?{queryString}");
+        var responseBody = await response.Content.ReadAsStringAsync();
+
+        if (response.IsSuccessStatusCode)
+        {
+            AllPlaces = JsonSerializer.Deserialize<List<Place>>(responseBody)
                    ?? new List<Place>();
+        }
+        else
+        {
+            Error = JsonSerializer.Deserialize<ErrorResponse>(responseBody) ?? new();
+            IsError = true;
+        }
 
         ApplyFilters();
         IsLoading = false;
