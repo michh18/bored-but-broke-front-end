@@ -4,7 +4,11 @@
 @using System.Text.Json
 @inject HttpClient Http
 
-@if (place is null)
+@if (_error)
+{
+    <p>Could not load place. Please try again.</p>
+}
+else if (place is null)
 {
     <p>Loading...</p>
 }
@@ -73,6 +77,8 @@ else
     public string PlaceId { get; set; } = string.Empty;
     private Place? place;
 
+    private bool _error = false;
+
     private string GetPriceDisplay()
     {
         return place?.Price switch
@@ -117,7 +123,7 @@ else
         }
         catch
         {
-            place = null;
+            _error = true;
         }
     }
 }
