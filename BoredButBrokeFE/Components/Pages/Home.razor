@@ -222,8 +222,6 @@
     {
         if (!SelectedCategories.Add(category.Alias))
             SelectedCategories.Remove(category.Alias);
-        // else
-        //     SelectedCategories.Add(category.Alias);
         StateHasChanged();
     }
 
@@ -282,7 +280,6 @@
                   $"&endTime={EndTime}" +
                   $"&ageRange={(int)AgeRange!}" +
                   $"&budget={Budget}";
-
         NavigationManager.NavigateTo(url);
     }
 }
