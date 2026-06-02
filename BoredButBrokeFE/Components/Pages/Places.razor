@@ -57,17 +57,28 @@ else
 
 @code {
     [SupplyParameterFromQuery]
-    public string Location { get; set; } 
+    public string Location { get; set; }
+
+    [SupplyParameterFromQuery(Name = "date")]
+    public string SelectedDate { get; set; }
+
+    [SupplyParameterFromQuery] 
+    public string StartTime { get; set; }
+
     [SupplyParameterFromQuery]
-    public DateTime? SelectedDate { get; set; }
-    [SupplyParameterFromQuery]
-    public string TimeOut { get; set; }
-    [SupplyParameterFromQuery]
-    public string TimeHome { get; set; }
+    public string EndTime { get; set; }
+
     [SupplyParameterFromQuery]
     public string AgeRange { get; set; }
+
     [SupplyParameterFromQuery]
     public string Budget { get; set; }
+
+    [SupplyParameterFromQuery]
+    public string Categories { get; set; } 
+
+    [SupplyParameterFromQuery]
+    public int Radius { get; set; } = 8047;
 
     private HashSet<Price> selectedPrices { get; set; } = new();
 
@@ -114,25 +125,24 @@ else
 
         if (!string.IsNullOrWhiteSpace(Location))
             queryParams["location"] = Location;
-
-        if (SelectedDate.HasValue)
-            queryParams["date"] = DateOnly.FromDateTime(SelectedDate.Value).ToString("yyyy-MM-dd");
-
-        if (!string.IsNullOrWhiteSpace(TimeOut))
-            queryParams["startTime"] = TimeOut;
-
-        if (!string.IsNullOrWhiteSpace(TimeHome))
-            queryParams["endTime"] = TimeHome;
-
+        if (Radius > 0)
+            queryParams["radius"] = Radius.ToString();
+        if (!string.IsNullOrWhiteSpace(Categories))
+            queryParams["categories"] = Categories;
+        if (!string.IsNullOrWhiteSpace(SelectedDate))
+            queryParams["date"] = SelectedDate;
+        if (!string.IsNullOrWhiteSpace(StartTime))
+            queryParams["startTime"] = StartTime;
+        if (!string.IsNullOrWhiteSpace(EndTime))
+            queryParams["endTime"] = EndTime;
         if (!string.IsNullOrWhiteSpace(AgeRange))
             queryParams["ageRange"] = AgeRange;
-
         if (!string.IsNullOrWhiteSpace(Budget))
             queryParams["budget"] = Budget;
 
         var queryString = string.Join("&", queryParams.Select(kv =>
             $"{Uri.EscapeDataString(kv.Key)}={Uri.EscapeDataString(kv.Value)}"));
-
+        Console.WriteLine(queryString);
         AllPlaces = await Http.GetFromJsonAsync<List<Place>>($"api/places?{queryString}")
                    ?? new List<Place>();
 
