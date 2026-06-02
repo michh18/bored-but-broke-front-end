@@ -1,3 +1,7 @@
+.about-mosaic {
+    background: none;
+}
+
 .hero-layout {
     display: flex;
     align-items: center;

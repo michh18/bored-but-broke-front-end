@@ -34,22 +34,23 @@
 
     <div class="hero-right">
         <h1>Are you bored but broke?</h1>
-        <p class="tagline">Tell us a bit about yourself and we will plan your perfect day out.</p>
+        <p class="tagline">Tell us a bit about yourself and we will do the rest.</p>
         <div class="plan-form">
-            <div class="form-question">
-                <label for="location">Enter your location</label>
-                <input type="text" id="location" placeholder="e.g. Manchester" class="form-input" @bind="Location" required />
-            </div>
-
-            <div class="form-question">
-                <label for="radius">Distance</label>
-                <select id="radius" class="form-input" @bind="Radius">
-                    <option value="1609">1 mile</option>
-                    <option value="4828">3 miles</option>
-                    <option value="8047">5 miles</option>
-                    <option value="16093">10 miles</option>
-                    <option value="24140">15 miles</option>
-                </select>
+            <div class="form-question-row">
+                <div class="form-question">
+                    <label for="location">Enter your location</label>
+                    <input type="text" id="location" placeholder="e.g. Manchester" class="form-input" @bind="Location" required />
+                </div>
+                <div class="form-question">
+                    <label for="radius">Distance</label>
+                    <select id="radius" class="form-input" @bind="Radius">
+                        <option value="1609">1 mile</option>
+                        <option value="4828">3 miles</option>
+                        <option value="8047">5 miles</option>
+                        <option value="16093">10 miles</option>
+                        <option value="24140">15 miles</option>
+                    </select>
+                </div>
             </div>
 
             <div class="form-question-row">
