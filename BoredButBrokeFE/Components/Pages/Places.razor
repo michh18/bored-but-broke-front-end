@@ -142,7 +142,6 @@ else
 
         var queryString = string.Join("&", queryParams.Select(kv =>
             $"{Uri.EscapeDataString(kv.Key)}={Uri.EscapeDataString(kv.Value)}"));
-        Console.WriteLine(queryString);
         AllPlaces = await Http.GetFromJsonAsync<List<Place>>($"api/places?{queryString}")
                    ?? new List<Place>();
 
