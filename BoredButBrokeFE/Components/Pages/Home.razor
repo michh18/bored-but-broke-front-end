@@ -19,7 +19,7 @@
         </p>
         <div class="hero-stats">
             <div class="hero-stat">
-                <span class="stat-number stat-pink">100M+</span>
+                <span class="stat-number stat-pink">100K+</span>
                 <span class="stat-label">Places to Explore</span>
             </div>
             <div class="hero-stat">
@@ -27,8 +27,12 @@
                 <span class="stat-label">Weather Forecast</span>
             </div>
             <div class="hero-stat">
-                <span class="stat-number stat-gold">Free</span>
-                <span class="stat-label">Always</span>
+                <span class="stat-number stat-gold">100% FREE</span>
+                <span class="stat-label">No signup. No subscription.</span>
+            </div>
+            <div class="hero-stat">
+                <span class="stat-number stat-turquoise">10K+</span>
+                <span class="stat-label">Free Activities</span>
             </div>
         </div>
     </div>
@@ -38,9 +42,7 @@
             <div class="form-header">
                 <h1>Are you bored but broke?</h1>
                 <p class="tagline">Tell us a bit about yourself and we will do the rest.</p>
-                <p class="required-note">Fields marked with * are required.</p>
-            </div>
-            <div class="form-question-row">
+            </div><div class="form-question-row">
                 <div class="form-question">
                     <label for="location">Enter your location*</label>
                     <input type="text" id="location" placeholder="e.g. Manchester" class="form-input" @bind="Location" required />
@@ -131,43 +133,110 @@
                 </ul>
             }
             <button class="btn-submit" @onclick="HandleSearch">Search</button>
+            <p class="required-note">Fields marked with * are required.</p>
         </div>
     </div>
 </div>
 
 <div class="mosaic-grid">
     <div class="mosaic-item mi-1 border-blue">
-        <img src="Home Images/pexels-steak.jpg" alt="Dining out" />
+        <a href="/places/PnAodBud4i364JTr_X1mcg" class="mosaic-link">
+            <img src="Home Images/pexels-steak.jpg" alt="Hawksmoor" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Hawksmoor</span>
+                <span class="mosaic-rating">★★★★☆ 4.4</span>
+            </div>
+        </a>
     </div>
     <div class="mosaic-item mi-2 border-turquoise">
-        <img src="Home Images/pexels-trafford-centre.jpg" alt="Trafford Centre" />
+        <a href="/places/jydWo0edI98Y-Swr5bmbBQ" class="mosaic-link">
+            <img src="Home Images/pexels-trafford-centre.jpg" alt="Trafford Centre" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Intu Trafford Centre</span>
+                <span class="mosaic-rating">★★★★☆ 3.9</span>
+            </div>
+        </a>
     </div>
     <div class="mosaic-item mi-3 border-blue">
-        <img src="Home Images/pexels-aquarium.jpg" alt="Aquarium" />
+        <a href="/places/SauGGzZDWw7Gr1Ohqm4omQ" class="mosaic-link">
+            <img src="Home Images/pexels-aquarium.jpg" alt="Sea Life" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Sea Life</span>
+                <span class="mosaic-rating">★★★☆☆ 3.2</span>
+            </div>
+        </a>
     </div>
     <div class="mosaic-item mi-4 border-pink">
-        <img src="Home Images/pexels-national-gallery.jpg" alt="National Gallery" />
+        <a href="/places/ElxBJGffVB-jV1kMCG9PbQ" class="mosaic-link">
+            <img src="Home Images/pexels-national-gallery.jpg" alt="The National Gallery" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">The National Gallery</span>
+                <span class="mosaic-rating">★★★★★ 4.7</span>
+            </div>
+        </a>
     </div>
     <div class="mosaic-item mi-5 border-gold">
-        <img src="Home Images/pexels-sky-garden.jpg" alt="Sky Garden" />
+        <a href="/places/h65i1MG-qok2e2eFU_1h1w" class="mosaic-link">
+            <img src="Home Images/pexels-sky-garden.jpg" alt="Sky Garden" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Sky Garden</span>
+                <span class="mosaic-rating">★★★★☆ 4.3</span>
+            </div>
+        </a>
     </div>
     <div class="mosaic-item mi-6 border-turquoise">
-        <img src="Home Images/pexels-camden-market.jpg" alt="Camden Market" />
+        <a href="/places/IYSKMlGpn--rfzyg9MpEyQ" class="mosaic-link">
+            <img src="Home Images/pexels-camden-market.jpg" alt="Camden Market" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Camden Market</span>
+                <span class="mosaic-rating">★★★★☆ 4.2</span>
+            </div>
+        </a>
     </div>
     <div class="mosaic-item mi-7 border-blue">
-        <img src="Home Images/pexels-go-karting.jpg" alt="Go Karting" />
+        <a href="/places/5BllGSfnsW45ywbXJSNEXg" class="mosaic-link">
+            <img src="Home Images/pexels-go-karting.jpg" alt="Lakeside Go Karting" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Buckmore Go Karting</span>
+                <span class="mosaic-rating">★★★★★ 5.0</span>
+            </div>
+        </a>
     </div>
     <div class="mosaic-item mi-8 border-gold">
-        <img src="Home Images/pexels-mini-golf.jpg" alt="Mini Golf" />
+        <a href="/places/tWkX5zOrWBe14aoJXsp19Q" class="mosaic-link">
+            <img src="Home Images/pexels-mini-golf.jpg" alt="Mini Golf" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Ghetto Golf</span>
+                <span class="mosaic-rating">★★★★☆ 3.8</span>
+            </div>
+        </a>
     </div>
     <div class="mosaic-item mi-9 border-deep">
-        <img src="Home Images/pexels-drink.jpg" alt="Drinks out" />
+        <a href="/places/vIYzfuZX1NpcvU94ZnUr4A" class="mosaic-link">
+            <img src="Home Images/pexels-drink.jpg" alt="All Bar One" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">All Bar One</span>
+                <span class="mosaic-rating">★★★★☆ 3.6</span>
+            </div>
+        </a>
     </div>
     <div class="mosaic-item mi-10 border-turquoise">
-        <img src="Home Images/pexels-swan.jpg" alt="Swan" />
+        <a href="/places/QVzZF7_nDvzZnwinPOgfPg" class="mosaic-link">
+            <img src="Home Images/pexels-swan.jpg" alt="Fairlop Waters" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Fairlop Waters</span>
+                <span class="mosaic-rating">★★★☆☆ 3.1</span>
+            </div>
+        </a>
     </div>
     <div class="mosaic-item mi-11 border-blue">
-        <img src="Home Images/pexels-zoo.jpg" alt="Zoo" />
+        <a href="/places/IEQLHQHgUiOU2j28gj8FVw" class="mosaic-link">
+            <img src="Home Images/pexels-zoo.jpg" alt="Chessington Zoo" />
+            <div class="mosaic-hover-overlay">
+                <span class="mosaic-place-name">Chessington World of Adventures</span>
+                <span class="mosaic-rating">★★★★☆ 3.7</span>
+            </div>
+        </a>
     </div>
 </div>
 
