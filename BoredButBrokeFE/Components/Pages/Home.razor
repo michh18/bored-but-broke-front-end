@@ -34,23 +34,27 @@
     </div>
 
     <div class="hero-right">
-        <h1>Are you bored but broke?</h1>
-        <p class="tagline">Tell us a bit about yourself and we will plan your perfect day out.</p>
         <div class="plan-form">
-            <div class="form-question">
-                <label for="location">Enter your location</label>
-                <input type="text" id="location" placeholder="e.g. Manchester" class="form-input" @bind="Location" required />
+            <div class="form-header">
+                <h1>Are you bored but broke?</h1>
+                <p class="tagline">Tell us a bit about yourself and we will do the rest.</p>
+                <p class="required-note">Fields marked with * are required.</p>
             </div>
-
-            <div class="form-question">
-                <label for="radius">Distance</label>
-                <select id="radius" class="form-input" @bind="Radius">
-                    <option value="1609">1 mile</option>
-                    <option value="4828">3 miles</option>
-                    <option value="8047">5 miles</option>
-                    <option value="16093">10 miles</option>
-                    <option value="24140">15 miles</option>
-                </select>
+            <div class="form-question-row">
+                <div class="form-question">
+                    <label for="location">Enter your location*</label>
+                    <input type="text" id="location" placeholder="e.g. Manchester" class="form-input" @bind="Location" required />
+                </div>
+                <div class="form-question">
+                    <label for="radius">Distance</label>
+                    <select id="radius" class="form-input" @bind="Radius">
+                        <option value="1609">1 mile</option>
+                        <option value="4828">3 miles</option>
+                        <option value="8047">5 miles</option>
+                        <option value="16093">10 miles</option>
+                        <option value="24140">15 miles</option>
+                    </select>
+                </div>
             </div>
 
             <div class="form-question-row">
@@ -97,7 +101,7 @@
 
             <div class="form-question-row">
                 <div class="form-question">
-                    <label for="age-range">Select an age range</label>
+                    <label for="age-range">Select an age range*</label>
                     <select id="age-range" class="form-input" @bind="AgeRangeValue" required>
                         <option value="" disabled selected>Choose an option</option>
                         <option value="0">Under 18</option>
@@ -106,7 +110,7 @@
                     </select>
                 </div>
                 <div class="form-question">
-                    <label for="budget">Select your budget</label>
+                    <label for="budget">Select your budget*</label>
                     <select id="budget" class="form-input" @bind="Budget" required>
                         <option value="" disabled selected>Choose a budget</option>
                         <option value="1">Cheap (£)</option>
@@ -131,62 +135,39 @@
     </div>
 </div>
 
-<div class="about-mosaic">
-    <div class="mosaic-top">
-        <div class="mosaic-img-wrapper">
-            <img src="https://picsum.photos/seed/h1/400/300" alt="Day out" />
-            <div class="mosaic-overlay"><span>Your text here</span></div>
-        </div>
-        <div class="mosaic-img-wrapper">
-            <img src="https://picsum.photos/seed/h2/400/300" alt="Friends out" />
-            <div class="mosaic-overlay"><span>Your text here</span></div>
-        </div>
-        <div class="mosaic-img-wrapper">
-            <img src="https://picsum.photos/seed/h3/400/300" alt="Activities" />
-            <div class="mosaic-overlay"><span>Your text here</span></div>
-        </div>
-        <div class="mosaic-img-wrapper">
-            <img src="https://picsum.photos/seed/h4/400/300" alt="Fun on a budget" />
-            <div class="mosaic-overlay"><span>Your text here</span></div>
-        </div>
+<div class="mosaic-grid">
+    <div class="mosaic-item mi-1 border-blue">
+        <img src="Home Images/pexels-steak.jpg" alt="Dining out" />
     </div>
-
-    <div class="mosaic-banner">
-        <div class="mosaic-img-wrapper">
-            <img src="https://picsum.photos/seed/h5/400/300" alt="Explore" />
-            <div class="mosaic-overlay"><span>Your text here</span></div>
-        </div>
-        <div class="mosaic-img-wrapper">
-            <img src="https://picsum.photos/seed/h11/400/300" alt="Day trip" />
-            <div class="mosaic-overlay"><span>Your text here</span></div>
-        </div>
-        <div class="mosaic-img-wrapper">
-            <img src="https://picsum.photos/seed/h12/400/300" alt="Outing" />
-            <div class="mosaic-overlay"><span>Your text here</span></div>
-        </div>
-        <div class="mosaic-img-wrapper">
-            <img src="https://picsum.photos/seed/h6/400/300" alt="Adventure" />
-            <div class="mosaic-overlay"><span>Your text here</span></div>
-        </div>
+    <div class="mosaic-item mi-2 border-turquoise">
+        <img src="Home Images/pexels-trafford-centre.jpg" alt="Trafford Centre" />
     </div>
-
-    <div class="mosaic-bottom">
-        <div class="mosaic-img-wrapper">
-            <img src="https://picsum.photos/seed/h7/400/300" alt="Weekend plans" />
-            <div class="mosaic-overlay"><span>Your text here</span></div>
-        </div>
-        <div class="mosaic-img-wrapper">
-            <img src="https://picsum.photos/seed/h8/400/300" alt="Local activities" />
-            <div class="mosaic-overlay"><span>Your text here</span></div>
-        </div>
-        <div class="mosaic-img-wrapper">
-            <img src="https://picsum.photos/seed/h9/400/300" alt="Budget day out" />
-            <div class="mosaic-overlay"><span>Your text here</span></div>
-        </div>
-        <div class="mosaic-img-wrapper">
-            <img src="https://picsum.photos/seed/h10/400/300" alt="Having fun" />
-            <div class="mosaic-overlay"><span>Your text here</span></div>
-        </div>
+    <div class="mosaic-item mi-3 border-blue">
+        <img src="Home Images/pexels-aquarium.jpg" alt="Aquarium" />
+    </div>
+    <div class="mosaic-item mi-4 border-pink">
+        <img src="Home Images/pexels-national-gallery.jpg" alt="National Gallery" />
+    </div>
+    <div class="mosaic-item mi-5 border-gold">
+        <img src="Home Images/pexels-sky-garden.jpg" alt="Sky Garden" />
+    </div>
+    <div class="mosaic-item mi-6 border-turquoise">
+        <img src="Home Images/pexels-camden-market.jpg" alt="Camden Market" />
+    </div>
+    <div class="mosaic-item mi-7 border-blue">
+        <img src="Home Images/pexels-go-karting.jpg" alt="Go Karting" />
+    </div>
+    <div class="mosaic-item mi-8 border-gold">
+        <img src="Home Images/pexels-mini-golf.jpg" alt="Mini Golf" />
+    </div>
+    <div class="mosaic-item mi-9 border-deep">
+        <img src="Home Images/pexels-drink.jpg" alt="Drinks out" />
+    </div>
+    <div class="mosaic-item mi-10 border-turquoise">
+        <img src="Home Images/pexels-swan.jpg" alt="Swan" />
+    </div>
+    <div class="mosaic-item mi-11 border-blue">
+        <img src="Home Images/pexels-zoo.jpg" alt="Zoo" />
     </div>
 </div>
 
