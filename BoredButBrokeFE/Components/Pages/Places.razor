@@ -120,14 +120,6 @@ else
     private bool IsLoading { get; set; } = true;
     private bool IsError { get; set; } = false;
     private ErrorResponse Error { get; set; } = new();
-    private record ErrorResponse
-    {
-        [JsonPropertyName("title")]
-        public string? Title { get; set; }
-
-        [JsonPropertyName("detail")]
-        public string? Detail { get; set; }
-    }
 
     private List<string> AvailableCategories =>
         AllPlaces.SelectMany(p => p.Categories)
