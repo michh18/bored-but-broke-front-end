@@ -3,7 +3,7 @@
 @using BoredButBrokeFE.Components.Models
 @using System.Text.Json
 @using System.Text.Json.Serialization
-@inject HttpClient Http
+@inject IHttpClientFactory HttpClientFactory
 @rendermode InteractiveServer
 
 <PageTitle>Places</PageTitle>
@@ -161,6 +161,7 @@ else
         var queryString = string.Join("&", queryParams.Select(kv =>
             $"{Uri.EscapeDataString(kv.Key)}={Uri.EscapeDataString(kv.Value)}"));
 
+        var Http = HttpClientFactory.CreateClient("BBBBackEnd");
         var response = await Http.GetAsync($"api/places?{queryString}");
         var responseBody = await response.Content.ReadAsStringAsync();
 
