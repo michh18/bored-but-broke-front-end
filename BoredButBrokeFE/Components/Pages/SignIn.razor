@@ -1,10 +1,31 @@
 @page "/signin"
+@using BoredButBrokeFE.Components.Models
+@using BoredButBrokeFE.Components.Models.Auth
+@using System.ComponentModel.DataAnnotations
+@inject IHttpClientFactory HttpClientFactory
+@inject NavigationManager NavigationManager
 @rendermode InteractiveServer
+
 
 <PageTitle>Sign In | Bored But Broke</PageTitle>
 <HeadContent>
     <link rel="stylesheet" href="css/signin.css" />
 </HeadContent>
+
+@if (Errors.Any())
+{
+    <ul>
+        @foreach (var error in Errors)
+        {
+            <li style="color:red">@error</li>
+        }
+    </ul>
+}
+
+@if (SuccessMessage is not null)
+{
+    <p style="color:green">@SuccessMessage</p>
+}
 
 <div class="auth-layout">
     <div class="auth-card">
@@ -34,36 +55,41 @@
         }
         else
         {
-            <div class="auth-form">
+            <EditForm Model="@regModel" OnValidSubmit="HandleRegister">
                 <h1 class="auth-heading">Create an account.</h1>
                 <p class="auth-subheading">Join Bored But Broke and start planning your perfect day out.</p>
+                <DataAnnotationsValidator />
 
                 <div class="form-question">
                     <label for="reg-name">Full name</label>
-                    <input type="text" id="reg-name" class="form-input" placeholder="e.g. David Rose" @bind="RegName" />
+                    <InputText type="text" id="reg-name" class="form-input" placeholder="e.g. David Rose" @bind-Value="regModel.RegName" />
+                    <ValidationMessage For="@(() => regModel.RegName)" class="text-danger" />
                 </div>
                 <div class="form-question">
                     <label for="reg-email">Email address</label>
-                    <input type="email" id="reg-email" class="form-input" placeholder="e.g. your@email.com" @bind="RegEmail" />
+                    <InputText type="email" id="reg-email" class="form-input" placeholder="e.g. your@email.com" @bind-Value="regModel.RegEmail" />
+                    <ValidationMessage For="@(() => regModel.RegEmail)" class="text-danger" />
                 </div>
                 <div class="form-question">
                     <label for="reg-password">Password</label>
-                    <input type="password" id="reg-password" class="form-input" placeholder="Choose a password" @bind="RegPassword" />
+                    <InputText type="password" id="reg-password" class="form-input" placeholder="Choose a password" @bind-Value="regModel.RegPassword" />
+                    <ValidationMessage For="@(() => regModel.RegPassword)" class="text-danger" />
                 </div>
                 <div class="form-question">
                     <label for="reg-confirm">Confirm password</label>
-                    <input type="password" id="reg-confirm" class="form-input" placeholder="Repeat your password" @bind="RegConfirm" />
+                    <InputText type="password" id="reg-confirm" class="form-input" placeholder="Repeat your password" @bind-Value="regModel.RegConfirm" />
+                    <ValidationMessage For="@(() => regModel.RegConfirm)" class="text-danger" />
                 </div>
 
-                <button class="btn-submit" @onclick="HandleRegister">Create Account</button>
-            </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </EditForm>
         }
-
     </div>
 </div>
 
 @code {
     private bool IsSignIn { get; set; } = true;
+    private bool IsLoading { get; set; } = true;
 
     private string SignInEmail { get; set; } = string.Empty;
     private string SignInPassword { get; set; } = string.Empty;
@@ -73,13 +99,89 @@
     private string RegPassword { get; set; } = string.Empty;
     private string RegConfirm { get; set; } = string.Empty;
 
+    private RegModel regModel = new();
+    private List<string> Errors = new();
+    private string? SuccessMessage;
+
     private void HandleSignIn()
     {
         Console.WriteLine($"Sign in: {SignInEmail}");
     }
 
-    private void HandleRegister()
+    private async Task HandleRegister()
     {
-        Console.WriteLine($"Register: {RegName}, {RegEmail}");
+        RegisterUserRequest regRequest;
+        Errors.Clear();
+        SuccessMessage = null;
+        IsLoading = true;
+
+        try
+        {
+            regRequest = new RegisterUserRequest
+            {
+                FullName = regModel.RegName,
+                Email = regModel.RegEmail,
+                Password = regModel.RegPassword
+            };
+
+            var client = HttpClientFactory.CreateClient("BBBBackEnd");
+            var response = await client.PostAsJsonAsync("api/auth/register", regRequest);
+
+            Console.WriteLine(response);
+
+            if (response.IsSuccessStatusCode)
+            {
+                SuccessMessage = "Account created! Redirecting to login...";
+                await Task.Delay(1500);
+                NavigationManager.NavigateTo("/signin", forceLoad: true);
+            }
+            else if (response.StatusCode == System.Net.HttpStatusCode.Conflict)
+            {
+                Errors.Add("That email is already registered.");
+            }
+            else
+            {
+                var result = await response.Content.ReadFromJsonAsync<ErrorResponse>();
+
+                if (result?.Detail is not null)
+                {
+                    Errors.AddRange(result.Detail.Split(" | "));
+                }
+                else
+                {
+                    Errors.Add("Registration failed. Please try again.");
+                }
+            }
+        }
+        catch (Exception)
+        {
+            Errors.Add("Could not reach the server. Please try again.");
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    private class RegModel
+    {
+        [Required(ErrorMessage = "Full name is required.")]
+        public string RegName { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Email is required.")]
+        [EmailAddress(ErrorMessage = "Invalid email format.")]
+        public string RegEmail { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Password is required.")]
+        [MinLength(8, ErrorMessage = "Password must be at least 8 characters long.")]
+        [RegularExpression(@"^(?=.*[A-Z])(?=.*\d).+$",
+        ErrorMessage = "Password must contain at least 1 capital letter and 1 digit.")]
+        [DataType(DataType.Password)]
+        public string RegPassword { get; set; } = string.Empty;
+
+        [Required(ErrorMessage = "Please confirm your password.")]
+        [DataType(DataType.Password)]
+        [Compare("RegPassword", ErrorMessage = "The passwords do not match.")]
+        public string RegConfirm { get; set; } = string.Empty;
     }
 }

@@ -2,7 +2,7 @@
 
 @using BoredButBrokeFE.Components.Models
 @using System.Text.Json
-@inject HttpClient Http
+@inject IHttpClientFactory HttpClientFactory
 
 @if (_error)
 {
@@ -117,6 +117,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        var Http = HttpClientFactory.CreateClient("BBBBackend");
         try
         {
             place = await Http.GetFromJsonAsync<Place>($"api/places/{PlaceId}");
