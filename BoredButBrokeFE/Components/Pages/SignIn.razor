@@ -6,7 +6,6 @@
 @inject IHttpClientFactory HttpClientFactory
 @inject NavigationManager NavigationManager
 @inject CookieAuthStateProvider AuthStateProvider
-@rendermode InteractiveServer
 
 
 <PageTitle>Sign In | Bored But Broke</PageTitle>
@@ -217,7 +216,7 @@
 
         [Required(ErrorMessage = "Please confirm your password.")]
         [DataType(DataType.Password)]
-        [Compare("RegPassword", ErrorMessage = "The passwords do not match.")]
+        [Compare("Password", ErrorMessage = "The passwords do not match.")]
         public string Confirm { get; set; } = string.Empty;
     }
 
