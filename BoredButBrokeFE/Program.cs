@@ -35,6 +35,7 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseStatusCodePagesWithRedirects("/404");
 
 app.UseStaticFiles();
 app.UseAntiforgery();
