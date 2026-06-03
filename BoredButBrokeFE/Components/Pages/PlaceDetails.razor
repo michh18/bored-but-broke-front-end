@@ -1,8 +1,14 @@
-﻿@page "/places/{PlaceId:int}"
+﻿@page "/places/{PlaceId}"
 
 @using BoredButBrokeFE.Components.Models
+@using System.Text.Json
+@inject HttpClient Http
 
-@if (place is null)
+@if (_error)
+{
+    <p>Could not load place. Please try again.</p>
+}
+else if (place is null)
 {
     <p>Loading...</p>
 }
@@ -68,102 +74,10 @@ else
 
 @code {
     [Parameter]
-    public int PlaceId{ get; set; }
+    public string PlaceId { get; set; } = string.Empty;
+    private Place? place;
 
-    // TODO: replace the below place variable with "private Place? place;" when connecting to BE
-    private Place? place = new Place
-    {
-        PlaceId = "1",
-        PlaceName = "Tate Modern",
-        Location = new Location
-        {
-            Address1 = "Bankside",
-            City = "London",
-            ZipCode = "SE1 9TG",
-            Country = "United Kingdom",
-            State = "England",
-            DisplayAddress = new List<string>
-            {
-                "Bankside",
-                "London SE1 9TG",
-                "United Kingdom"
-            }
-        },
-        Categories = new List<Category>
-        {
-            new Category
-            {
-                Alias = "art_gallery",
-                Title = "Art Gallery"
-            },
-            new Category
-            {
-                Alias = "museum",
-                Title = "Museum"
-            }
-        },
-        Price = Price.Cheap,
-        Coordinates = new Coordinates
-        {
-            Latitude = 51.5076,
-            Longitude = -0.0994
-        },
-        OpeningHours = new List<OpeningHours>
-        {
-            new OpeningHours {
-                Hours = new List<Hour>
-                {
-                    new Hour
-                    {
-                        Day = 0,
-                        Start = "0800",
-                        End = "2300"
-                    },
-                    new Hour
-                    {
-                        Day = 1,
-                        Start = "0800",
-                        End = "2300"
-                    },
-                    new Hour
-                    {
-                        Day = 2,
-                        Start = "0800",
-                        End = "2300"
-                    },
-                    new Hour
-                    {
-                        Day = 3,
-                        Start = "0800",
-                        End = "2300"
-                    },
-                    new Hour
-                    {
-                        Day = 4,
-                        Start = "0800",
-                        End = "0000"
-                    },
-                    new Hour
-                    {
-                        Day = 5,
-                        Start = "0900",
-                        End = "0000"
-                    },
-                    new Hour
-                    {
-                        Day = 6,
-                        Start = "0900",
-                        End = "2300"
-                    }
-                },
-                HoursType = "REGULAR",
-                IsOpenNow = true
-            }
-        },
-        Rating = 4.8,
-        PlaceUrl = "https://www.tate.org.uk/visit/tate-modern",
-        ImageUrl = "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee"
-    };
+    private bool _error = false;
 
     private string GetPriceDisplay()
     {
@@ -201,18 +115,15 @@ else
         return $"{time[0..2]}:{time[2..4]}";
     }
 
-    // TODO: uncomment when connecting to BE
-    // private HttpClient http = new HttpClient();
-
-    // protected override async Task OnInitializedAsync()
-    // {
-    //     try
-    //     {
-    //         place = await http.GetFromJsonAsync<Place>($"https:localhost:5001/api/places/{PlaceId}"); // replace url 
-    //     }
-    //     catch
-    //     {
-    //         place = null;
-    //     }
-    // }
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            place = await Http.GetFromJsonAsync<Place>($"api/places/{PlaceId}");
+        }
+        catch
+        {
+            _error = true;
+        }
+    }
 }
