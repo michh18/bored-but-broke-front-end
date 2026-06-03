@@ -1,10 +1,19 @@
+using BoredButBrokeFE.Auth;
 using BoredButBrokeFE.Components;
+using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorizationCore();
+
+builder.Services.AddScoped<CookieAuthStateProvider>();
+builder.Services.AddScoped<AuthenticationStateProvider>(sp =>
+    sp.GetRequiredService<CookieAuthStateProvider>());
 
 builder.Services.AddHttpClient("BBBBackEnd", client =>
     client.BaseAddress = new Uri("https://localhost:7141/"))
