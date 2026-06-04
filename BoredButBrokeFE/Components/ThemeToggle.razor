@@ -1,0 +1,65 @@
+@using BoredButBrokeFE.Services
+@inject ThemeService ThemeService
+
+<button class="theme-toggle" @onclick="HandleToggle" title="Toggle dark mode">
+    @if (CurrentTheme == "light")
+    {
+        <span class="theme-icon">🌙</span>
+    }
+    else
+    {
+        <span class="theme-icon">☀️</span>
+    }
+</button>
+
+<style>
+    .theme-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 1.5rem;
+        padding: 0.5rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+        margin-left: 1rem;
+    }
+
+    .theme-toggle:hover {
+        transform: scale(1.2);
+    }
+
+    .theme-icon {
+        display: block;
+    }
+</style>
+
+@code {
+    private string CurrentTheme = "light";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await ThemeService.InitializeThemeAsync();
+        CurrentTheme = ThemeService.GetCurrentTheme();
+        ThemeService.OnThemeChanged += OnThemeChanged;
+    }
+
+    private async Task HandleToggle()
+    {
+        await ThemeService.ToggleThemeAsync();
+        CurrentTheme = ThemeService.GetCurrentTheme();
+    }
+
+    private void OnThemeChanged()
+    {
+        CurrentTheme = ThemeService.GetCurrentTheme();
+        StateHasChanged();
+    }
+
+    void IAsyncDisposable.DisposeAsync()
+    {
+        ThemeService.OnThemeChanged -= OnThemeChanged;
+        return default;
+    }
+}
