@@ -317,6 +317,14 @@ select.form-input option {
     background-color: transparent;
 }
 
+.nav-greeting {
+    color: #000000;
+}
+
+:root[data-theme="dark"] .nav-greeting {
+    color: #ffffff;
+}
+
 /* Error page (404) styling */
 .notfound-page {
     background-color: var(--primary-bg);

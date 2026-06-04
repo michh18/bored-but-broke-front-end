@@ -13,16 +13,6 @@
     <link rel="stylesheet" href="css/signin.css" />
 </HeadContent>
 
-@if (Errors.Any())
-{
-    <ul>
-        @foreach (var error in Errors)
-        {
-            <li style="color:red">@error</li>
-        }
-    </ul>
-}
-
 @if (SuccessMessage is not null)
 {
     <p style="color:green">@SuccessMessage</p>
@@ -39,17 +29,23 @@
         @if (IsSignIn)
         {
             <EditForm Model="@loginModel" OnValidSubmit="HandleSignIn" class="auth-form">
+                <DataAnnotationsValidator />
                 <h1 class="auth-heading">Welcome back.</h1>
                 <p class="auth-subheading">Sign in to your account to continue planning.</p>
 
                 <div class="form-question">
                     <label for="signin-email">Email address</label>
                     <InputText type="email" id="signin-email" class="form-input" placeholder="e.g. your@email.com" @bind-Value="loginModel.Email" />
-                    <ValidationMessage For="@(() => regModel.Name)" class="text-danger" />
+                    <ValidationMessage For="@(() => loginModel.Email)" class="text-danger" />
+                    @if (Errors.Any())
+                    {
+                        <span class="api-error">@Errors.First()</span>
+                    }
                 </div>
                 <div class="form-question">
                     <label for="signin-password">Password</label>
                     <InputText type="password" id="signin-password" class="form-input" placeholder="Enter your password" @bind-Value="loginModel.Password" />
+                    <ValidationMessage For="@(() => loginModel.Password)" class="text-danger" />
                 </div>
 
                 <button type="submit" class="btn-submit">Sign In</button>
@@ -142,6 +138,7 @@
         finally
         {
             IsLoading = false;
+            StateHasChanged();
         }
     }
 
