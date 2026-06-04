@@ -49,8 +49,8 @@
                             : Error.Detail)
         </p>
 
-            <button class="places-error-button" @onclick="RefreshPage">
-                Try Again
+            <button class="places-error-button" @onclick="GoHome">
+                Go Back Home
             </button>
 
         </div>
@@ -248,9 +248,9 @@ else
                 (selectedCategories.Count == 0 || p.Categories.Any(c => selectedCategories.Contains(c.Title))))
             .ToList();
     }
-    private void RefreshPage()
+    private void GoHome()
     {
-        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+        Navigation.NavigateTo("/");
     }
 
     private async Task GoBack()
