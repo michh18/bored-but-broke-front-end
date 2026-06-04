@@ -1,5 +1,6 @@
 using BoredButBrokeFE.Auth;
 using BoredButBrokeFE.Components;
+using BoredButBrokeFE.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorizationCore();
+
+builder.Services.AddScoped<ThemeService>();
 
 builder.Services.AddScoped<CookieAuthStateProvider>();
 builder.Services.AddScoped<AuthenticationStateProvider>(sp =>
