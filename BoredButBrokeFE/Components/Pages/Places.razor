@@ -7,6 +7,7 @@
 @using System.Text.Json
 @using System.Text.Json.Serialization
 @inject IHttpClientFactory HttpClientFactory
+@inject IJSRuntime JS
 
 <PageTitle>Places</PageTitle>
 
@@ -63,6 +64,10 @@ else
 {
     <div class="places-results-page">
         <div class="filter-column">
+            <button class="back-button" @onclick="GoBack">
+                <span class="back-arrow">←</span>
+                <span>Back</span>
+            </button>
             <h3 class="filter-title">Filters</h3>
 
             <div class="filter-section">
@@ -246,5 +251,10 @@ else
     private void RefreshPage()
     {
         Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
+    }
+
+    private async Task GoBack()
+    {
+        await JS.InvokeVoidAsync("history.back");
     }
 }
