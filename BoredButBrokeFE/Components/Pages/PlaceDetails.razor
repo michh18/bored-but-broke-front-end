@@ -3,6 +3,7 @@
 @using BoredButBrokeFE.Components.Models
 @using System.Text.Json
 @inject IHttpClientFactory HttpClientFactory
+@inject IJSRuntime JS
 
 @if (_error)
 {
@@ -15,7 +16,12 @@ else if (place is null)
 else
 {
     <div class="place-details-page">
+        <button class="back-button" @onclick="GoBack">
+            <span class="back-arrow">←</span>
+            <span>Back</span>
+        </button>
         <div class="place-img">
+            
             <img src="@place.ImageUrl" alt="@place.PlaceName" />
         </div>
         <div class="place-content">
@@ -126,5 +132,10 @@ else
         {
             _error = true;
         }
+    }
+
+    private async Task GoBack()
+    {
+        await JS.InvokeVoidAsync("history.back");
     }
 }
