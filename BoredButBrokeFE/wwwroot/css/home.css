@@ -2,6 +2,13 @@
     background: none;
 }
 
+.mosaic-title {
+    margin: 2rem 3rem 0 3rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #0F172A;
+}
+
 .mosaic-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -88,6 +95,21 @@
 .border-gold      { border-color: #EAB308; }
 .border-prussian  { border-color: #0F172A; }
 .border-deep      { border-color: #1E293B; }
+
+.mosaic-view-more-label {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    font-size: 0.75rem;
+    color: #ffffff;
+    font-weight: 600;
+    display: none;
+    transition: opacity 0.3s ease;
+}
+
+.mosaic-link:hover .mosaic-view-more-label {
+    display: block;
+}
 
 .hero-layout {
     display: flex;
@@ -275,4 +297,39 @@
 .form-input option:checked {
     background-color: #60A5FA;
     color: #fff;
+}
+
+.download-section {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.3rem;
+    padding: 0;
+    margin-top: 3rem;
+}
+
+.qr-code-container {
+    flex: 0 0 auto;
+}
+
+.qr-code {
+    width: 240px;
+    height: 240px;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+}
+
+.app-stores-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    flex: 0 0 auto;
+}
+
+.download-badge {
+    height: 225px;
+    width: auto;
+    display: block;
+    border: none;
+    outline: none;
 }
