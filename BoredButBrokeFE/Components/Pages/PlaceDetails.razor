@@ -117,7 +117,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var Http = HttpClientFactory.CreateClient("BBBBackend");
+        var Http = HttpClientFactory.CreateClient("BBBBackEnd");
         try
         {
             place = await Http.GetFromJsonAsync<Place>($"api/places/{PlaceId}");
