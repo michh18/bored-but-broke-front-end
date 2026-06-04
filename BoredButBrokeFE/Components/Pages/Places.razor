@@ -1,4 +1,7 @@
-﻿@page "/places"
+﻿@inject NavigationManager Navigation
+@inject IHttpClientFactory HttpClientFactory
+
+@page "/places"
 
 @using BoredButBrokeFE.Components.Models
 @using System.Text.Json
@@ -9,9 +12,48 @@
 
 @if (IsError)
 {
-    <p>Error</p>
-    <p>@Error.Title</p>
-    <p>@Error.Detail</p>
+    <div class="places-error-page">
+        <div class="places-error-wrapper">
+
+            <div class="places-error-illustration">
+                <div class="places-error-bubble"></div>
+
+                <div class="places-error-browser">
+                    <div class="places-error-browser-bar">
+                        <span class="places-error-browser-dot"></span>
+                        <span class="places-error-browser-dot"></span>
+                        <span class="places-error-browser-dot"></span>
+                    </div>
+
+                    <div class="places-error-browser-face">
+                        <div class="places-error-browser-eyes">
+                            <div class="places-error-browser-eye"></div>
+                            <div class="places-error-browser-eye"></div>
+                        </div>
+
+                        <div class="places-error-browser-mouth"></div>
+                    </div>
+                </div>
+
+                <div class="places-error-browser-shadow"></div>
+            </div>
+
+            <h1 class="places-error-title">
+                Oops!
+            </h1>
+
+            <p class="places-error-text">
+                @(string.IsNullOrWhiteSpace(Error.Detail)
+                            ? "We couldn't load places right now."
+                            : Error.Detail)
+        </p>
+
+            <button class="places-error-button" @onclick="RefreshPage">
+                Try Again
+            </button>
+
+        </div>
+    </div>
 }
 else if (IsLoading)
 {
@@ -200,5 +242,9 @@ else
             .Where(p => (selectedPrices.Count == 0 || selectedPrices.Contains(p.Price)) &&
                 (selectedCategories.Count == 0 || p.Categories.Any(c => selectedCategories.Contains(c.Title))))
             .ToList();
+    }
+    private void RefreshPage()
+    {
+        Navigation.NavigateTo(Navigation.Uri, forceLoad: true);
     }
 }

@@ -24,7 +24,6 @@ html, body {
     padding: 40px 20px;
 }
 
-/* Illustration */
 .notfound-illustration {
     position: relative;
     width: 220px;
@@ -151,7 +150,6 @@ html, body {
     border-radius: 50%;
 }
 
-/* Text */
 .notfound-title {
     font-size: 38px;
     font-weight: 400;
@@ -168,7 +166,6 @@ html, body {
     margin-bottom: 32px;
 }
 
-/* Button */
 .notfound-button {
     display: inline-block;
     padding: 10px 32px;
@@ -187,7 +184,6 @@ html, body {
         color: #ffffff;
     }
 
-/* Footer */
 .notfound-footer {
     border-top: 1px solid #f0f0f0;
     padding: 14px 20px;
