@@ -26,5 +26,6 @@ namespace BoredButBrokeFE.Components.Models
         public string PlaceUrl { get; set; } = string.Empty;
         [JsonPropertyName("imageUrl")]
         public string ImageUrl { get; set; } = string.Empty;
+        public bool IsFavourited { get; set; } 
     }
 }
