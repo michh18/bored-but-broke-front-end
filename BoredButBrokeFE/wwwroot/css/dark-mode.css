@@ -26,24 +26,22 @@
     --overlay-bg: rgba(0, 0, 0, 0.85);
 }
 
+html {
+    background-color: var(--primary-bg);
+}
+
 body {
     background-color: var(--primary-bg);
     color: var(--primary-text);
     transition: background-color 0.3s ease, color 0.3s ease;
+    margin: 0;
+    padding: 0;
 }
 
 .top-nav {
-    background-color: var(--nav-bg);
-    border-bottom: 1px solid var(--border-color);
+    border-bottom: none;
 }
 
-.nav-item ::deep .nav-link {
-    color: var(--nav-text);
-}
-
-.nav-item ::deep .nav-link:hover {
-    color: #FB7185;
-}
 
 .plan-form {
     background-color: var(--input-bg);
@@ -57,8 +55,30 @@ body {
     color: var(--primary-text);
 }
 
+:root[data-theme="dark"] .form-input {
+    color: #000000;
+}
+
 .form-input:focus {
     border-color: #60A5FA;
+}
+
+select.form-input {
+    color: #000000;
+}
+
+:root[data-theme="dark"] select.form-input {
+    color: #000000;
+}
+
+select.form-input option {
+    color: #000000;
+    background-color: #ffffff;
+}
+
+:root[data-theme="dark"] select.form-input option {
+    color: #000000;
+    background-color: #ffffff;
 }
 
 .form-question label {
@@ -69,8 +89,16 @@ body {
     color: var(--secondary-text);
 }
 
+:root[data-theme="dark"] .tagline {
+    color: #ffffff;
+}
+
 .required-note {
     color: var(--secondary-text);
+}
+
+:root[data-theme="dark"] .required-note {
+    color: #ffffff;
 }
 
 .hero-heading {
@@ -78,7 +106,7 @@ body {
 }
 
 :root[data-theme="dark"] .hero-heading {
-    color: #e0e0e0;
+    color: #ffffff;
 }
 
 .hero-description {
@@ -86,7 +114,7 @@ body {
 }
 
 :root[data-theme="dark"] .hero-description {
-    color: #b0b0b0;
+    color: #ffffff;
 }
 
 .stat-label {
@@ -94,7 +122,7 @@ body {
 }
 
 :root[data-theme="dark"] .stat-label {
-    color: #b0b0b0;
+    color: #ffffff;
 }
 
 .page-content {
@@ -102,9 +130,53 @@ body {
     color: var(--primary-text);
 }
 
+.page-content h1 {
+    color: #0F172A;
+}
+
+:root[data-theme="dark"] .page-content h1 {
+    color: #ffffff;
+}
+
+.page-content h2 {
+    color: #0F172A;
+}
+
+:root[data-theme="dark"] .page-content h2 {
+    color: #ffffff;
+}
+
+.page-content .lead {
+    color: #1E293B;
+}
+
+:root[data-theme="dark"] .page-content .lead {
+    color: #ffffff;
+}
+
+.page-content p {
+    color: #1E293B;
+}
+
+:root[data-theme="dark"] .page-content p {
+    color: #ffffff;
+}
+
+.page-content strong {
+    color: #1E293B;
+}
+
+:root[data-theme="dark"] .page-content strong {
+    color: #ffffff;
+}
+
 .faq-item summary {
     color: var(--primary-text);
     background-color: var(--input-bg);
+}
+
+:root[data-theme="dark"] .faq-item summary {
+    color: #ffffff;
 }
 
 .faq-item {
@@ -113,6 +185,10 @@ body {
 
 .faq-item p {
     color: var(--secondary-text);
+}
+
+:root[data-theme="dark"] .faq-item p {
+    color: #ffffff;
 }
 
 .auth-card {
@@ -125,8 +201,16 @@ body {
     color: var(--primary-text);
 }
 
+:root[data-theme="dark"] .auth-heading {
+    color: #ffffff;
+}
+
 .auth-subheading {
     color: var(--secondary-text);
+}
+
+:root[data-theme="dark"] .auth-subheading {
+    color: #ffffff;
 }
 
 .toggle-btn {
@@ -141,6 +225,14 @@ body {
 .toggle-btn.active {
     background-color: #60A5FA;
     color: #ffffff;
+}
+
+.about-mosaic {
+    background-color: var(--primary-bg);
+}
+
+:root[data-theme="dark"] .about-mosaic {
+    background-color: #000000;
 }
 
 .mosaic-hover-overlay {
@@ -162,6 +254,10 @@ body {
     color: var(--primary-text);
 }
 
+:root[data-theme="dark"] .category-chips .chip {
+    color: #ffffff;
+}
+
 .category-chips .chip:hover {
     border-color: #60A5FA;
 }
@@ -170,4 +266,150 @@ body {
     background-color: #60A5FA;
     color: #ffffff;
     border-color: #60A5FA;
+}
+
+:root[data-theme="dark"] .category-chips .chip-selected {
+    background-color: #FB7185;
+    border-color: #FB7185;
+}
+
+.facts-text p {
+    color: #1E293B;
+}
+
+:root[data-theme="dark"] .facts-text p {
+    color: #ffffff;
+}
+
+#fact-display {
+    color: #1E293B;
+}
+
+:root[data-theme="dark"] #fact-display {
+    color: #ffffff;
+}
+
+.plan-form h1 {
+    color: #0F172A;
+}
+
+:root[data-theme="dark"] .plan-form h1 {
+    color: #ffffff;
+}
+
+.mosaic-title {
+    color: #0F172A;
+}
+
+:root[data-theme="dark"] .mosaic-title {
+    color: #ffffff;
+}
+
+.qr-code {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.1);
+}
+
+:root[data-theme="dark"] .qr-code {
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+}
+
+:root[data-theme="dark"] .theme-toggle-wrapper {
+    background-color: transparent;
+}
+
+/* Error page (404) styling */
+.notfound-page {
+    background-color: var(--primary-bg);
+}
+
+:root[data-theme="dark"] .notfound-page {
+    background-color: #1a1a1a;
+}
+
+.notfound-title {
+    color: #2DD4BF;
+}
+
+:root[data-theme="dark"] .notfound-title {
+    color: #2DD4BF;
+}
+
+.notfound-text {
+    color: #FB7185;
+}
+
+:root[data-theme="dark"] .notfound-text {
+    color: #FB7185;
+}
+
+.notfound-button {
+    color: #2DD4BF;
+    border-color: #2DD4BF;
+    background-color: transparent;
+}
+
+:root[data-theme="dark"] .notfound-button {
+    color: #2DD4BF;
+    border-color: #2DD4BF;
+    background-color: transparent;
+}
+
+.notfound-button:hover {
+    background-color: #2DD4BF;
+    color: #1a1a1a;
+}
+
+:root[data-theme="dark"] .notfound-button:hover {
+    background-color: #2DD4BF;
+    color: #1a1a1a;
+}
+
+.notfound-footer {
+    color: #9ca3af;
+    border-top-color: #333333;
+}
+
+:root[data-theme="dark"] .notfound-footer {
+    color: #9ca3af;
+    border-top-color: #333333;
+    background-color: #0f0f0f;
+}
+
+.notfound-browser {
+    background-color: #1a1a1a;
+    border-color: #2DD4BF;
+}
+
+:root[data-theme="dark"] .notfound-browser {
+    background-color: #2a2a2a;
+    border-color: #2DD4BF;
+}
+
+.notfound-browser-shadow {
+    background-color: #444444;
+}
+
+:root[data-theme="dark"] .notfound-browser-shadow {
+    background-color: #555555;
+}
+
+/* Error page (/Error) styling */
+.text-danger {
+    color: #dc2626;
+}
+
+:root[data-theme="dark"] .text-danger {
+    color: #ef4444;
+}
+
+code {
+    background-color: var(--input-bg);
+    color: var(--primary-text);
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+:root[data-theme="dark"] code {
+    background-color: #2a2a2a;
+    color: #2DD4BF;
 }
