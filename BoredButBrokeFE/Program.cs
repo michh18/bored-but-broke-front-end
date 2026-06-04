@@ -1,4 +1,3 @@
-//using BoredButBrokeFE.Client.Pages;
 using BoredButBrokeFE.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,10 +6,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddScoped(sp => new HttpClient
-{
-    BaseAddress = new Uri("https://localhost:7141/")
-});
+builder.Services.AddHttpClient("BBBBackEnd", client =>
+    client.BaseAddress = new Uri("https://localhost:7141/"))
+    .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
+    {
+        UseCookies = true,
+        AllowAutoRedirect = false
+    });
 
 var app = builder.Build();
 
