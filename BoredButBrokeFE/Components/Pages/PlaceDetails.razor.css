@@ -177,9 +177,12 @@
     cursor: pointer;
     transition: all 0.2s ease;
 }
+.back-arrow {
+    font-size: 1.2rem;
+}
 
-    .back-button:hover {
-        background: #F9FAFB;
-        border-color: #D1D5DB;
-        transform: translateX(-2px);
-    }
+.back-button:hover {
+    background: #F9FAFB;
+    border-color: #D1D5DB;
+    transform: translateX(-2px);
+}
