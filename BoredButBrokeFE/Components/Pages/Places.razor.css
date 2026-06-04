@@ -38,3 +38,62 @@
         background: #38bdf8;
         color: white;
     }
+
+.places-results-page {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 2rem;
+    align-items: start;
+    padding: 1rem;
+}
+
+.places-results {
+    width: 100%;
+    min-width: 0;
+}
+
+.filter-column {
+    position: sticky;
+    top: 2rem;
+    height: fit-content;
+    background: #ffffff;
+    padding: 0.5rem;
+    border-right: 1px solid #000000;
+}
+
+.filter-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.view-more-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 6px;
+    padding: 0;
+    background: none;
+    border: none;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #fb7185;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    transition: color 0.15s ease, gap 0.15s ease;
+}
+
+    .view-more-btn::after {
+        content: '›';
+        font-size: 1rem;
+        transition: transform 0.2s ease;
+    }
+
+    .view-more-btn:hover {
+        color: #4f46e5;
+        gap: 7px;
+    }
+    .view-more-btn.expanded::after {
+        transform: rotate(90deg);
+    }
