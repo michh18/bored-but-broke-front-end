@@ -317,12 +317,129 @@ select.form-input option {
     background-color: transparent;
 }
 
+:root[data-theme="dark"] .main-footer {
+    background-color: #1a1a1a;
+    border-top-color: #333333;
+    color: #9ca3af;
+}
+
 .nav-greeting {
     color: #000000;
 }
 
 :root[data-theme="dark"] .nav-greeting {
     color: #000000;
+}
+
+/* Places page */
+:root[data-theme="dark"] .places-results-page {
+    background-color: #1a1a1a;
+}
+
+:root[data-theme="dark"] .filter-column {
+    background-color: #2a2a2a;
+    border-right-color: #444444;
+}
+
+:root[data-theme="dark"] .filter-column h3,
+:root[data-theme="dark"] .filter-column h4 {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .filter-option span {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .places-results h1,
+:root[data-theme="dark"] .places-results h2,
+:root[data-theme="dark"] .places-results h3 {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .places-results p {
+    color: #60A5FA;
+}
+
+.places-results p {
+    color: #60A5FA;
+}
+
+:root[data-theme="dark"] .back-button {
+    background-color: #2a2a2a;
+    border-color: #444444;
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .back-button:hover {
+    background-color: #333333;
+    border-color: #555555;
+}
+
+/* Place summary cards */
+:root[data-theme="dark"] .place-card {
+    background-color: #2a2a2a;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+:root[data-theme="dark"] .place-card h3 {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .place-card p {
+    color: #b0b0b0;
+}
+
+:root[data-theme="dark"] .place-info {
+    background-color: #2a2a2a;
+}
+
+/* Place details page */
+:root[data-theme="dark"] .place-details-page {
+    background-color: #1a1a1a;
+}
+
+:root[data-theme="dark"] .place-title-section h1 {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .place-location {
+    color: #b0b0b0;
+}
+
+:root[data-theme="dark"] .place-section {
+    background-color: #2a2a2a;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.3);
+}
+
+:root[data-theme="dark"] .place-section h2 {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .hour-row {
+    border-bottom-color: #444444;
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .loading-text {
+    color: #b0b0b0;
+}
+
+:root[data-theme="dark"] .category-tag {
+    background: #fb7185;
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .favourite-btn {
+    background-color: #2a2a2a;
+}
+
+:root[data-theme="dark"] .place-link {
+    background-color: #2DD4BF;
+    color: #1a1a1a;
+}
+
+:root[data-theme="dark"] .place-link:hover {
+    background-color: #26b8a5;
 }
 
 /* Error page (404) styling */
