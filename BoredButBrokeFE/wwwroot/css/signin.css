@@ -109,3 +109,16 @@
 .btn-submit:hover {
     background-color: #4a94e8;
 }
+
+.text-danger,
+.validation-message {
+    font-size: 0.78rem;
+    color: #e11d48;
+    margin: 0;
+}
+
+.api-error {
+    font-size: 0.78rem;
+    color: #e11d48;
+    margin: 0;
+}
