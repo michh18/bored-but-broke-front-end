@@ -6,13 +6,28 @@ namespace BoredButBrokeFE.Auth
     public class CookieAuthStateProvider : AuthenticationStateProvider
     {
         private readonly IHttpClientFactory _httpClientFactory;
-
+        private Task<AuthenticationState>? _cachedAuthStateTask;
         private static readonly AuthenticationState _loggedOut = new(new ClaimsPrincipal(new ClaimsIdentity()));
         public CookieAuthStateProvider(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }
-        public override async Task<AuthenticationState> GetAuthenticationStateAsync()
+        public override Task<AuthenticationState> GetAuthenticationStateAsync()
+        {
+            return _cachedAuthStateTask ??= FetchAuthStateAsync();
+        }
+        public async Task NotifyUserLoggedIn()
+        {
+            _cachedAuthStateTask = FetchAuthStateAsync();
+            NotifyAuthenticationStateChanged(_cachedAuthStateTask);
+            await _cachedAuthStateTask;
+        }
+        public void NotifyUserLoggedOut()
+        {
+            _cachedAuthStateTask = Task.FromResult(_loggedOut);
+            NotifyAuthenticationStateChanged(_cachedAuthStateTask);
+        }
+        private async Task<AuthenticationState> FetchAuthStateAsync()
         {
             try
             {
@@ -32,7 +47,6 @@ namespace BoredButBrokeFE.Auth
 
                 var identity = new ClaimsIdentity(claims, "cookie");
                 var principal = new ClaimsPrincipal(identity);
-
                 return new AuthenticationState(principal);
             }
             catch
@@ -40,12 +54,6 @@ namespace BoredButBrokeFE.Auth
                 return _loggedOut;
             }
         }
-
-        public void NotifyAuthStateChanged()
-        {
-            NotifyAuthenticationStateChanged(GetAuthenticationStateAsync());
-        }
-
         private record UserInfo(string? Email, string? FirstName);
     }
 }
