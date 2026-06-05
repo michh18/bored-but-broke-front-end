@@ -11,12 +11,6 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddCascadingAuthenticationState();
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-    .AddCookie(options =>
-    {
-        options.ExpireTimeSpan = TimeSpan.FromHours(8);
-        options.SlidingExpiration = true;
-    }); 
 builder.Services.AddAuthorizationCore();
 
 builder.Services.AddScoped<ThemeService>();
@@ -30,6 +24,7 @@ builder.Services.AddHttpClient("BBBBackEnd", client =>
     .ConfigurePrimaryHttpMessageHandler(() => new HttpClientHandler
     {
         UseCookies = true,
+        CookieContainer = new System.Net.CookieContainer(),
         AllowAutoRedirect = false
     });
 
