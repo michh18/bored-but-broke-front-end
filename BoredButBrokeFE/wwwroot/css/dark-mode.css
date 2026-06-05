@@ -375,6 +375,24 @@ select.form-input option {
     border-color: #555555;
 }
 
+/* Favourites page */
+:root[data-theme="dark"] .places-results h1 {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .filter-column h3,
+:root[data-theme="dark"] .filter-column h4 {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .filter-option span {
+    color: #ffffff;
+}
+
+:root[data-theme="dark"] .places-results-page p {
+    color: #ffffff;
+}
+
 /* Place summary cards */
 :root[data-theme="dark"] .place-card {
     background-color: #2a2a2a;
