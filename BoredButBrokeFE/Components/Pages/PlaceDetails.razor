@@ -79,13 +79,17 @@ else
                         </div>
                     </div>
 
-                    <div class="place-section map-section">
-                        <h2>Location</h2>
+                    @if (place.Coordinates.Latitude != 0 && place.Coordinates.Longitude != 0)
+                    {
+                        <div class="place-section map-section">
+                            <h2>Location</h2>
 
-                        <MovableMap ElementId="placeMap"
-                                    InitialLatitude="@place.Coordinates.Latitude"
-                                    InitialLongitude="@place.Coordinates.Longitude" />
-                    </div>
+                            <MovableMap ElementId="placeMap"
+                                        InitialLatitude="@place.Coordinates.Latitude"
+                                        InitialLongitude="@place.Coordinates.Longitude" 
+                                        LocationName="@place.PlaceName"/>
+                        </div>                        
+                    }
                 </div>
                 <div class="right-column">
                     <div class="place-section">
