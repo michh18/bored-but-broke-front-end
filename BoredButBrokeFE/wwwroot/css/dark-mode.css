@@ -376,19 +376,6 @@ select.form-input option {
 }
 
 /* Favourites page */
-:root[data-theme="dark"] .places-results h1 {
-    color: #ffffff;
-}
-
-:root[data-theme="dark"] .filter-column h3,
-:root[data-theme="dark"] .filter-column h4 {
-    color: #ffffff;
-}
-
-:root[data-theme="dark"] .filter-option span {
-    color: #ffffff;
-}
-
 :root[data-theme="dark"] .places-results-page p {
     color: #ffffff;
 }
