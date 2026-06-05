@@ -1,16 +1,13 @@
-﻿@inject NavigationManager Navigation
+﻿@page "/places"
 @inject IHttpClientFactory HttpClientFactory
-
-@page "/places"
-
+@inject NavigationManager Navigation
 @using BoredButBrokeFE.Components.Models
 @using System.Text.Json
 @using System.Text.Json.Serialization
-@inject IHttpClientFactory HttpClientFactory
 
 <PageTitle>Places</PageTitle>
 
-@if (IsError)
+@if (isError)
 {
     <div class="places-error-page">
         <div class="places-error-wrapper">
@@ -43,9 +40,9 @@
             </h1>
 
             <p class="places-error-text">
-                @(string.IsNullOrWhiteSpace(Error.Detail)
+                @(string.IsNullOrWhiteSpace(error.Detail)
                             ? "We couldn't load places right now."
-                            : Error.Detail)
+                            : error.Detail)
         </p>
 
             <button class="places-error-button" @onclick="GoHome">
@@ -55,7 +52,7 @@
         </div>
     </div>
 }
-else if (IsLoading)
+else if (isLoading)
 {
     <p>Finding places for you...</p>
 }
@@ -67,7 +64,7 @@ else
 
             <div class="filter-section">
                 <h4>Categories</h4>
-                @foreach (var category in VisibleCategories)
+                @foreach (var category in visibleCategories)
                 {
                     <label class="filter-option">
                         <input type="checkbox"
@@ -76,10 +73,10 @@ else
                         <span>@category</span>
                     </label>
                 }
-                @if (AvailableCategories.Count > CategoryPreviewCount)
+                @if (availableCategories.Count > categoryPreviewCount)
                 {
                     <button type="button" class="view-more-btn" @onclick="ToggleShowAllCategories">
-                        @(ShowAllCategories ? "View less" : $"View {AvailableCategories.Count - CategoryPreviewCount} more...")
+                        @(showAllCategories ? "View less" : $"View {availableCategories.Count - categoryPreviewCount} more...")
                     </button>
                 }
             </div>
@@ -87,7 +84,7 @@ else
             <div class="filter-section">
                 <h4>Price</h4>
 
-                @foreach (var price in AvailablePrices)
+                @foreach (var price in availablePrices)
                 {
                     <label class="filter-option">
                         <input type="checkbox" checked="@selectedPrices.Contains(price)" @onchange="() => TogglePrice(price)" />
@@ -99,11 +96,11 @@ else
 
         <div class="places-results">
             <h1>Found Results</h1>
-            @if (IsIndoor != null)
+            @if (isIndoor != null)
             {
-                <p>The weather for @SelectedDate, from @StartTime to @EndTime is suitable for @(IsIndoor.Value ? "indoor activities only." : "both indoor and outdoor activities.")</p>
+                <p>The weather for @SelectedDate, from @StartTime to @EndTime is suitable for @(isIndoor.Value ? "indoor activities only." : "both indoor and outdoor activities.")</p>
             }
-            <PlaceSummaryList Places="FilteredPlaces"/>
+            <PlaceSummaryList Places="filteredPlaces"/>
         </div>
     </div>
 }
@@ -133,9 +130,16 @@ else
     [SupplyParameterFromQuery]
     public int Radius { get; set; } = 8047;
 
+    private List<Place> allPlaces { get; set; } = new();
+    private List<Place> filteredPlaces { get; set; } = new();
+    private bool? isIndoor { get; set; }
+    private bool isLoading { get; set; } = true;
+    private bool isError { get; set; } = false;
+    private ErrorResponse error { get; set; } = new();
+
     private HashSet<Price> selectedPrices { get; set; } = new();
 
-    private List<Price> AvailablePrices => AllPlaces
+    private List<Price> availablePrices => allPlaces
         .Select(p => p.Price)
         .Distinct()
         .OrderBy(p => p)
@@ -160,15 +164,8 @@ else
         _ => price.ToString()
     };
 
-    private List<Place> AllPlaces { get; set; } = new();
-    private List<Place> FilteredPlaces { get; set; } = new();
-    private bool? IsIndoor { get; set; }
-    private bool IsLoading { get; set; } = true;
-    private bool IsError { get; set; } = false;
-    private ErrorResponse Error { get; set; } = new();
-
-    private List<string> AvailableCategories =>
-        AllPlaces.SelectMany(p => p.Categories)
+    private List<string> availableCategories =>
+        allPlaces.SelectMany(p => p.Categories)
                     .Select(c => c.Title)
                     .Distinct()
                     .ToList();
@@ -206,26 +203,26 @@ else
         if (response.IsSuccessStatusCode)
         {
             var placesResponse = JsonSerializer.Deserialize<PlacesResponse>(responseBody);
-            AllPlaces = placesResponse?.Places ?? new List<Place>();
-            IsIndoor = placesResponse?.IsIndoor;
+            allPlaces = placesResponse?.Places ?? new List<Place>();
+            isIndoor = placesResponse?.IsIndoor;
         }
         else
         {
-            Error = JsonSerializer.Deserialize<ErrorResponse>(responseBody) ?? new();
-            IsError = true;
+            error = JsonSerializer.Deserialize<ErrorResponse>(responseBody) ?? new();
+            isError = true;
         }
 
         ApplyFilters();
-        IsLoading = false;
+        isLoading = false;
     }
 
-    private const int CategoryPreviewCount = 5;
-    private bool ShowAllCategories { get; set; } = false;
+    private const int categoryPreviewCount = 5;
+    private bool showAllCategories { get; set; } = false;
 
-    private List<string> VisibleCategories =>
-        ShowAllCategories
-            ? AvailableCategories
-            : AvailableCategories.Take(CategoryPreviewCount).ToList();
+    private List<string> visibleCategories =>
+        showAllCategories
+            ? availableCategories
+            : availableCategories.Take(categoryPreviewCount).ToList();
 
     private void ToggleCategory(string category)
     {
@@ -238,13 +235,13 @@ else
     }
     private void ToggleShowAllCategories()
     {
-        ShowAllCategories = !ShowAllCategories;
+        showAllCategories = !showAllCategories;
     }
 
     private void ApplyFilters()
     {
 
-        FilteredPlaces = AllPlaces
+        filteredPlaces = allPlaces
             .Where(p => (selectedPrices.Count == 0 || selectedPrices.Contains(p.Price)) &&
                 (selectedCategories.Count == 0 || p.Categories.Any(c => selectedCategories.Contains(c.Title))))
             .ToList();
