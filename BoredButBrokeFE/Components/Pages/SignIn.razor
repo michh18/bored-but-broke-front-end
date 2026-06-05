@@ -44,7 +44,16 @@
                 </div>
                 <div class="form-question">
                     <label for="signin-password">Password</label>
-                    <InputText type="password" id="signin-password" class="form-input" placeholder="Enter your password" @bind-Value="loginModel.Password" />
+                    <div class="password-wrapper">
+                        <InputText type="@(ShowSignInPassword ? "text" : "password")" id="signin-password" class="form-input" placeholder="Enter your password" @bind-Value="loginModel.Password" />
+                        <button type="button" class="eye-btn" @onclick="() => ShowSignInPassword = !ShowSignInPassword">
+                            @if (ShowSignInPassword) {
+                                <span>🙈</span>
+                            } else {
+                                <span>👁️</span>
+                            }
+                        </button>
+                    </div>
                     <ValidationMessage For="@(() => loginModel.Password)" class="text-danger" />
                 </div>
 
@@ -70,12 +79,30 @@
                 </div>
                 <div class="form-question">
                     <label for="reg-password">Password</label>
-                    <InputText type="password" id="reg-password" class="form-input" placeholder="Choose a password" @bind-Value="regModel.Password" />
+                    <div class="password-wrapper">
+                        <InputText type="@(ShowRegPassword ? "text" : "password")" id="reg-password" class="form-input" placeholder="Choose a password" @bind-Value="regModel.Password" />
+                        <button type="button" class="eye-btn" @onclick="() => ShowRegPassword = !ShowRegPassword">
+                            @if (ShowRegPassword) {
+                                <span>🙈</span>
+                            } else {
+                                <span>👁️</span>
+                            }
+                        </button>
+                    </div>
                     <ValidationMessage For="@(() => regModel.Password)" class="text-danger" />
                 </div>
                 <div class="form-question">
                     <label for="reg-confirm">Confirm password</label>
-                    <InputText type="password" id="reg-confirm" class="form-input" placeholder="Repeat your password" @bind-Value="regModel.Confirm" />
+                    <div class="password-wrapper">
+                        <InputText type="@(ShowRegConfirm ? "text" : "password")" id="reg-confirm" class="form-input" placeholder="Repeat your password" @bind-Value="regModel.Confirm" />
+                        <button type="button" class="eye-btn" @onclick="() => ShowRegConfirm = !ShowRegConfirm">
+                            @if (ShowRegConfirm) {
+                                <span>🙈</span>
+                            } else {
+                                <span>👁️</span>
+                            }
+                        </button>
+                    </div>
                     <ValidationMessage For="@(() => regModel.Confirm)" class="text-danger" />
                 </div>
 
@@ -96,6 +123,10 @@
     private LoginModel loginModel = new();
     private List<string> Errors = new();
     private string? SuccessMessage;
+
+    private bool ShowSignInPassword { get; set; } = false;
+    private bool ShowRegPassword { get; set; } = false;
+    private bool ShowRegConfirm { get; set; } = false;
 
     private async Task HandleSignIn()
     {
