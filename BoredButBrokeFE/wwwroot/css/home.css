@@ -333,3 +333,45 @@
     border: none;
     outline: none;
 }
+
+@media (max-width: 768px) {
+    .hero-layout {
+        flex-direction: column;
+        padding: 2rem 1.5rem;
+        min-height: unset;
+    }
+
+    .hero-left {
+        width: 100%;
+    }
+
+    .hero-right {
+        width: 100%;
+        flex: unset;
+        margin-left: 0;
+        padding-right: 0;
+        order: 3;
+    }
+
+    .download-section {
+        order: 2;
+        justify-content: center;
+    }
+
+    .mosaic-title {
+        margin: 1.5rem 1rem 0 1rem;
+        font-size: 1.75rem;
+    }
+
+    .mosaic-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: unset;
+        padding: 1rem;
+    }
+
+    .mi-1, .mi-2, .mi-3, .mi-4, .mi-5,
+    .mi-6, .mi-7, .mi-8, .mi-9, .mi-10, .mi-11 {
+        grid-column: unset;
+        grid-row: unset;
+    }
+}
