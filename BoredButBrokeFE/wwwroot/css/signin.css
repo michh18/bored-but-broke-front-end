@@ -110,6 +110,29 @@
     background-color: #4a94e8;
 }
 
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper .form-input {
+    padding-right: 2.8rem;
+}
+
+.eye-btn {
+    position: absolute;
+    right: 0.75rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+}
+
 .text-danger,
 .validation-message {
     font-size: 0.78rem;

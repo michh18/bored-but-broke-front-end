@@ -22,9 +22,16 @@ main {
 .top-header {
     background-color: #f8fafc;
     padding: 1rem 1.5rem;
-    border-bottom: 1px solid #333;
     display: flex;
     justify-content: space-between;
     align-items: center;
     min-height: 6rem;
+}
+
+.main-footer {
+    background-color: #f8fafc;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    font-size: 0.85rem;
+    color: #9ca3af;
 }
