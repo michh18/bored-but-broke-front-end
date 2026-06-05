@@ -146,6 +146,13 @@
         color: #111827;
     }
 
+.map-section {
+    padding: 0;
+    overflow: hidden;
+    border-radius: 16px;
+    height: fit-content;
+}
+
 .category-list {
     display: flex;
     gap: 0.75rem;
@@ -247,3 +254,10 @@
     border-color: #D1D5DB;
     transform: translateX(-2px);
 }
+
+/*.places-category-and-opening-hours {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+    align-items: start;
+}*/

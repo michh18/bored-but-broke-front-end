@@ -67,34 +67,45 @@ else
             </div>
 
             <div class="places-category-and-opening-hours">
-                <div class="place-section">
-                    <h2>Categories</h2>
+                <div class="left-column">
+                    <div class="place-section">
+                        <h2>Categories</h2>
 
-                    <div class="category-list">
-                        @foreach (var category in place.Categories)
-                        {
-                            <div class="category-tag">@category.Title</div>
-                        }
-                    </div>
-                </div>
-
-                <div class="place-section">
-                    <h2>Opening Hours</h2>
-
-                    <div class="hours-list">
-                        @foreach (var openingHours in place.OpeningHours)
-                        {
-                            @foreach (var hour in openingHours.Hours)
+                        <div class="category-list">
+                            @foreach (var category in place.Categories)
                             {
-                                <div class="hour-row">
-                                    <span>@GetDayName(hour.Day)</span>
-                                    <span>@FormatTime(hour.Start) - @FormatTime(hour.End)</span>
-                                </div>
+                                <div class="category-tag">@category.Title</div>
                             }
-                        }
+                        </div>
+                    </div>
+
+                    <div class="place-section map-section">
+                        <h2>Location</h2>
+
+                        <MovableMap ElementId="placeMap"
+                                    InitialLatitude="@place.Coordinates.Latitude"
+                                    InitialLongitude="@place.Coordinates.Longitude" />
                     </div>
                 </div>
-            </div>
+                <div class="right-column">
+                    <div class="place-section">
+                        <h2>Opening Hours</h2>
+
+                        <div class="hours-list">
+                            @foreach (var openingHours in place.OpeningHours)
+                            {
+                                @foreach (var hour in openingHours.Hours)
+                                {
+                                    <div class="hour-row">
+                                        <span>@GetDayName(hour.Day)</span>
+                                        <span>@FormatTime(hour.Start) - @FormatTime(hour.End)</span>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+                </div>
 
             <a class="place-link" href="@place.PlaceUrl" target="_blank">
                 Visit Website

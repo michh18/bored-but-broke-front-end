@@ -1,11 +1,11 @@
-﻿@page "/places"
+﻿@page "/favourites"
 @inject IHttpClientFactory HttpClientFactory
 @inject NavigationManager Navigation
 @using BoredButBrokeFE.Components.Models
 @using System.Text.Json
 @using System.Text.Json.Serialization
 
-<PageTitle>Places</PageTitle>
+<PageTitle>Favourites</PageTitle>
 
 @if (isError)
 {
@@ -41,7 +41,7 @@
 
             <p class="places-error-text">
                 @(string.IsNullOrWhiteSpace(error.Detail)
-                            ? "We couldn't load places right now."
+                            ? "We couldn't load your favourites right now."
                             : error.Detail)
         </p>
 
@@ -54,7 +54,17 @@
 }
 else if (isLoading)
 {
-    <p>Finding places for you...</p>
+    <p>Loading your favourite places...</p>
+}
+else if (!allFavouritePlaces.Any())
+{
+    <div class="places-error-page">
+        <div class="places-error-wrapper">
+            <h1 class="places-error-title">No favourites yet!</h1>
+            <p class="places-error-text">Start exploring and save places you love.</p>
+            <button class="places-error-button" @onclick="GoHome">Find Places</button>
+        </div>
+    </div>
 }
 else
 {
@@ -68,8 +78,8 @@ else
                 {
                     <label class="filter-option">
                         <input type="checkbox"
-                                checked="@selectedCategories.Contains(category)"
-                                @onchange="() => ToggleCategory(category)" />
+                               checked="@selectedCategories.Contains(category)"
+                               @onchange="() => ToggleCategory(category)" />
                         <span>@category</span>
                     </label>
                 }
@@ -95,51 +105,22 @@ else
         </div>
 
         <div class="places-results">
-            <h1>Found Results</h1>
-            @if (isIndoor != null)
-            {
-                <p>The weather for @SelectedDate, from @StartTime to @EndTime is suitable for @(isIndoor.Value ? "indoor activities only." : "both indoor and outdoor activities.")</p>
-            }
+            <h1>Your Favourites</h1>
             <PlaceSummaryList Places="filteredPlaces"/>
         </div>
     </div>
 }
 
 @code {
-    [SupplyParameterFromQuery]
-    public string Location { get; set; }
-
-    [SupplyParameterFromQuery(Name = "date")]
-    public string SelectedDate { get; set; }
-
-    [SupplyParameterFromQuery] 
-    public string StartTime { get; set; }
-
-    [SupplyParameterFromQuery]
-    public string EndTime { get; set; }
-
-    [SupplyParameterFromQuery]
-    public string AgeRange { get; set; }
-
-    [SupplyParameterFromQuery]
-    public string Budget { get; set; }
-
-    [SupplyParameterFromQuery]
-    public string Categories { get; set; } 
-
-    [SupplyParameterFromQuery]
-    public int Radius { get; set; } = 8047;
-
-    private List<Place> allPlaces { get; set; } = new();
+    private List<Place> allFavouritePlaces { get; set; } = new();
     private List<Place> filteredPlaces { get; set; } = new();
-    private bool? isIndoor { get; set; }
     private bool isLoading { get; set; } = true;
     private bool isError { get; set; } = false;
     private ErrorResponse error { get; set; } = new();
 
     private HashSet<Price> selectedPrices { get; set; } = new();
 
-    private List<Price> availablePrices => allPlaces
+    private List<Price> availablePrices => allFavouritePlaces
         .Select(p => p.Price)
         .Distinct()
         .OrderBy(p => p)
@@ -165,7 +146,7 @@ else
     };
 
     private List<string> availableCategories =>
-        allPlaces.SelectMany(p => p.Categories)
+        allFavouritePlaces.SelectMany(p => p.Categories)
                     .Select(c => c.Title)
                     .Distinct()
                     .ToList();
@@ -174,48 +155,22 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var queryParams = new Dictionary<string, string>();
-
-        if (!string.IsNullOrWhiteSpace(Location))
-            queryParams["location"] = Location;
-        if (Radius > 0)
-            queryParams["radius"] = Radius.ToString();
-        if (!string.IsNullOrWhiteSpace(Categories))
-            queryParams["categories"] = Categories;
-        if (!string.IsNullOrWhiteSpace(SelectedDate))
-            queryParams["date"] = SelectedDate;
-        if (!string.IsNullOrWhiteSpace(StartTime))
-            queryParams["startTime"] = StartTime;
-        if (!string.IsNullOrWhiteSpace(EndTime))
-            queryParams["endTime"] = EndTime;
-        if (!string.IsNullOrWhiteSpace(AgeRange))
-            queryParams["ageRange"] = AgeRange;
-        if (!string.IsNullOrWhiteSpace(Budget))
-            queryParams["budget"] = Budget;
-
-        var queryString = string.Join("&", queryParams.Select(kv =>
-            $"{Uri.EscapeDataString(kv.Key)}={Uri.EscapeDataString(kv.Value)}"));
-
         var Http = HttpClientFactory.CreateClient("BBBBackEnd");
-        var response = await Http.GetAsync($"api/places?{queryString}");
+        var response = await Http.GetAsync("api/favourites");
         var responseBody = await response.Content.ReadAsStringAsync();
 
         if (response.IsSuccessStatusCode)
         {
-            var placesResponse = JsonSerializer.Deserialize<PlacesResponse>(responseBody);
-            allPlaces = placesResponse?.Places ?? new List<Place>();
-            isIndoor = placesResponse?.IsIndoor;
+            allFavouritePlaces = JsonSerializer.Deserialize<List<Place>>(responseBody) ?? new();
         }
         else
         {
             error = JsonSerializer.Deserialize<ErrorResponse>(responseBody) ?? new();
             isError = true;
         }
-
         ApplyFilters();
         isLoading = false;
     }
-
     private const int categoryPreviewCount = 5;
     private bool showAllCategories { get; set; } = false;
 
@@ -241,7 +196,7 @@ else
     private void ApplyFilters()
     {
 
-        filteredPlaces = allPlaces
+        filteredPlaces = allFavouritePlaces
             .Where(p => (selectedPrices.Count == 0 || selectedPrices.Contains(p.Price)) &&
                 (selectedCategories.Count == 0 || p.Categories.Any(c => selectedCategories.Contains(c.Title))))
             .ToList();
@@ -249,13 +204,5 @@ else
     private void GoHome()
     {
         Navigation.NavigateTo("/");
-    }
-
-    private record PlacesResponse
-    {
-        [JsonPropertyName("places")]
-        public List<Place> Places { get; set; } = [];
-        [JsonPropertyName("isIndoor")]
-        public bool IsIndoor { get; set; }
     }
 }
