@@ -23,7 +23,8 @@
     {
         var client = HttpClientFactory.CreateClient("BBBBackEnd");
         await client.PostAsync("api/auth/logout", null);
-        AuthStateProvider.NotifyAuthStateChanged();
+
+        AuthStateProvider.NotifyUserLoggedOut();
         Nav.NavigateTo("/");
     }
 }

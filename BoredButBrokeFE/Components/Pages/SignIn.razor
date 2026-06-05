@@ -117,7 +117,7 @@
 
             if (response.IsSuccessStatusCode)
             {
-                AuthStateProvider.NotifyAuthStateChanged();
+                await AuthStateProvider.NotifyUserLoggedIn();
                 SuccessMessage = "Login successful! Redirecting to the home page...";
                 await Task.Delay(1500);
                 NavigationManager.NavigateTo("/");

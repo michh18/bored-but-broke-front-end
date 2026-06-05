@@ -322,7 +322,7 @@ select.form-input option {
 }
 
 :root[data-theme="dark"] .nav-greeting {
-    color: #ffffff;
+    color: #000000;
 }
 
 /* Error page (404) styling */

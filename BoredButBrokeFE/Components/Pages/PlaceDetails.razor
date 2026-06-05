@@ -1,5 +1,6 @@
 ﻿@page "/places/{PlaceId}"
 
+@using BoredButBrokeFE.Auth
 @using BoredButBrokeFE.Components.Models
 @using System.Text.Json
 @inject IHttpClientFactory HttpClientFactory
@@ -128,7 +129,7 @@ else
     private Place? place;
 
     [Inject] 
-    private AuthenticationStateProvider authStateProvider { get; set; }
+    private CookieAuthStateProvider authStateProvider { get; set; }
 
     private bool error = false;
     private bool isFavourited = false;
@@ -140,14 +141,27 @@ else
         try
         {
             place = await Http.GetFromJsonAsync<Place>($"api/places/{PlaceId}");
-            isFavourited = place?.IsFavourited ?? false;
+
+            var authState = await authStateProvider.GetAuthenticationStateAsync();
+            var isLoggedIn = authState.User.Identity?.IsAuthenticated ?? false;
+
+            if (isLoggedIn)
+            {
+                var response = await Http.GetAsync($"api/favourites/status?placeIds={PlaceId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseBody = await response.Content.ReadAsStringAsync();
+                    var status = JsonSerializer.Deserialize<List<bool>>(responseBody);
+                    isFavourited = status?[0] ?? false;
+                }
+            }
         }
         catch
         {
             error = true;
         }
     }
-    
+
     private async Task HandleFavouriteClick()
     {
         var authState = await authStateProvider.GetAuthenticationStateAsync();
@@ -159,15 +173,27 @@ else
             return;
         }
 
+        var Http = HttpClientFactory.CreateClient("BBBBackEnd");
+
         if (isFavourited)
         {
-            isFavourited = false;
+            try
+            {
+                var response = await Http.DeleteAsync($"api/favourites/{PlaceId}");
+                if (response.IsSuccessStatusCode)
+                {
+                    isFavourited = false;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Error.WriteLine($"Remove favourite failed: {ex.Message}");
+            }
             return;
         }
 
         try
         {
-            var Http = HttpClientFactory.CreateClient("BBBBackEnd");
             var response = await Http.PostAsJsonAsync("api/favourites", place);
             if (response.IsSuccessStatusCode)
             {

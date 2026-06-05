@@ -99,6 +99,10 @@ else
 
         <div class="places-results">
             <h1>Found Results</h1>
+            @if (IsIndoor != null)
+            {
+                <p>The weather for @SelectedDate, from @StartTime to @EndTime is suitable for @(IsIndoor.Value ? "indoor activities only." : "both indoor and outdoor activities.")</p>
+            }
             <PlaceSummaryList Places="FilteredPlaces"/>
         </div>
     </div>
@@ -158,6 +162,7 @@ else
 
     private List<Place> AllPlaces { get; set; } = new();
     private List<Place> FilteredPlaces { get; set; } = new();
+    private bool? IsIndoor { get; set; }
     private bool IsLoading { get; set; } = true;
     private bool IsError { get; set; } = false;
     private ErrorResponse Error { get; set; } = new();
@@ -200,8 +205,9 @@ else
 
         if (response.IsSuccessStatusCode)
         {
-            AllPlaces = JsonSerializer.Deserialize<List<Place>>(responseBody)
-                   ?? new List<Place>();
+            var placesResponse = JsonSerializer.Deserialize<PlacesResponse>(responseBody);
+            AllPlaces = placesResponse?.Places ?? new List<Place>();
+            IsIndoor = placesResponse?.IsIndoor;
         }
         else
         {
@@ -220,7 +226,7 @@ else
         ShowAllCategories
             ? AvailableCategories
             : AvailableCategories.Take(CategoryPreviewCount).ToList();
-    
+
     private void ToggleCategory(string category)
     {
         if (selectedCategories.Contains(category))
@@ -246,5 +252,13 @@ else
     private void GoHome()
     {
         Navigation.NavigateTo("/");
+    }
+
+    private record PlacesResponse
+    {
+        [JsonPropertyName("places")]
+        public List<Place> Places { get; set; } = [];
+        [JsonPropertyName("isIndoor")]
+        public bool IsIndoor { get; set; }
     }
 }
