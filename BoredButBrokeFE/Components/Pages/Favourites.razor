@@ -106,7 +106,7 @@ else
 
         <div class="places-results">
             <h1>Your Favourites</h1>
-            <PlaceSummaryList Places="filteredPlaces" OnRemoveFavourite="RemoveFavourite" />
+            <PlaceSummaryList Places="filteredPlaces"/>
         </div>
     </div>
 }
@@ -168,7 +168,7 @@ else
             error = JsonSerializer.Deserialize<ErrorResponse>(responseBody) ?? new();
             isError = true;
         }
-
+        ApplyFilters();
         isLoading = false;
     }
     private const int categoryPreviewCount = 5;
