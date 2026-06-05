@@ -6,6 +6,9 @@
 
 <AuthorizeView>
     <Authorized>
+        <div class="nav-item">
+            <NavLink class="nav-link" href="favourites">Favourites</NavLink>
+        </div>
         <div class="nav-auth-wrapper">
             <span class="nav-greeting">Hello, @context.User.FindFirst(System.Security.Claims.ClaimTypes.GivenName)?.Value!</span>
             <button class="nav-logout-btn" @onclick="HandleLogout">Log out</button>
