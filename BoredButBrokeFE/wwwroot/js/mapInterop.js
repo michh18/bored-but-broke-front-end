@@ -2,7 +2,7 @@
 
 window.mapInterop = {
 
-    initializeMap: function (elementId, lat, lng, zoomLevel) {
+    initializeMap: function (elementId, lat, lng, zoomLevel, locationName) {
 
         if (mapInstance) {
             mapInstance.remove();
@@ -20,14 +20,16 @@ window.mapInterop = {
         }, 1000);
 
         L.tileLayer(
-            'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+            'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
             {
                 maxZoom: 19,
                 attribution: '© OpenStreetMap contributors'
             }).addTo(mapInstance);
 
         L.marker([lat, lng])
-            .addTo(mapInstance);
+            .addTo(mapInstance)
+            .bindPopup(locationName)
+            .openPopup();
 
         requestAnimationFrame(() => {
             mapInstance.invalidateSize();

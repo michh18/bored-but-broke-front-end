@@ -8,13 +8,16 @@
     public string ElementId { get; set; } = "placeMap";
 
     [Parameter]
-    public double InitialLatitude { get; set; }
+    public double InitialLatitude { get; set; } = 51.5074;
 
     [Parameter]
-    public double InitialLongitude { get; set; }
+    public double InitialLongitude { get; set; } = -0.1278;
 
     [Parameter]
     public int InitialZoom { get; set; } = 15;
+
+    [Parameter]
+    public string LocationName { get; set; } = "London";
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -25,7 +28,9 @@
                 ElementId,
                 InitialLatitude,
                 InitialLongitude,
-                InitialZoom);
+                InitialZoom,
+                LocationName
+            );
         }
     }
 }
