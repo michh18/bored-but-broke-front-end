@@ -1,0 +1,31 @@
+﻿@inject IJSRuntime JSRuntime
+
+<div id="@ElementId" class="place-map"></div>
+
+@code {
+
+    [Parameter]
+    public string ElementId { get; set; } = "placeMap";
+
+    [Parameter]
+    public double InitialLatitude { get; set; }
+
+    [Parameter]
+    public double InitialLongitude { get; set; }
+
+    [Parameter]
+    public int InitialZoom { get; set; } = 15;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JSRuntime.InvokeVoidAsync(
+                "mapInterop.initializeMap",
+                ElementId,
+                InitialLatitude,
+                InitialLongitude,
+                InitialZoom);
+        }
+    }
+}
