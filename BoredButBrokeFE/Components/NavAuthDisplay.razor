@@ -6,8 +6,10 @@
 
 <AuthorizeView>
     <Authorized>
-        <span>Hello, @context.User.FindFirst(System.Security.Claims.ClaimTypes.GivenName)?.Value!</span>
-        <button @onclick="HandleLogout">Log out</button>
+        <div class="nav-auth-wrapper">
+            <span class="nav-greeting">Hello, @context.User.FindFirst(System.Security.Claims.ClaimTypes.GivenName)?.Value!</span>
+            <button class="nav-logout-btn" @onclick="HandleLogout">Log out</button>
+        </div>
     </Authorized>
     <NotAuthorized>
         <div class="nav-item nav-signin-wrapper">

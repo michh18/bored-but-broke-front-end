@@ -70,3 +70,32 @@
         color: #fff;
         font-weight: 700;
     }
+
+.nav-auth-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-left: auto;
+}
+
+.nav-greeting {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #000000;
+}
+
+.nav-logout-btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #fff;
+    background-color: #FB7185;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.nav-logout-btn:hover {
+    background-color: #f43f5e;
+}
