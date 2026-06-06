@@ -1,38 +1,61 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Components.Authorization;
+﻿using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components.Server;
+using System.Net.Http;
+using System.Security.Claims;
 
 namespace BoredButBrokeFE.Auth
 {
-    public class CookieAuthStateProvider : AuthenticationStateProvider
+    public class CookieAuthStateProvider : RevalidatingServerAuthenticationStateProvider
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        private Task<AuthenticationState>? _cachedAuthStateTask;
+        private readonly UserCookieContainer _cookieContainer;
         private static readonly AuthenticationState _loggedOut = new(new ClaimsPrincipal(new ClaimsIdentity()));
-        public CookieAuthStateProvider(IHttpClientFactory httpClientFactory)
+        protected override TimeSpan RevalidationInterval => TimeSpan.FromMinutes(20);
+        public CookieAuthStateProvider(ILoggerFactory loggerFactory, 
+            IHttpClientFactory httpClientFactory, 
+            UserCookieContainer cookieContainer) 
+            : base(loggerFactory)
         {
+
             _httpClientFactory = httpClientFactory;
+            _cookieContainer = cookieContainer;
         }
-        public override Task<AuthenticationState> GetAuthenticationStateAsync()
+        public override async Task<AuthenticationState> GetAuthenticationStateAsync()
         {
-            return _cachedAuthStateTask ??= FetchAuthStateAsync();
+            return await FetchAuthStateAsync();
         }
-        public async Task NotifyUserLoggedIn()
+        protected override async Task<bool> ValidateAuthenticationStateAsync(AuthenticationState state, CancellationToken token)
         {
-            _cachedAuthStateTask = FetchAuthStateAsync();
-            NotifyAuthenticationStateChanged(_cachedAuthStateTask);
-            await _cachedAuthStateTask;
+            var currentPrincipal = state.User;
+            if (currentPrincipal.Identity?.IsAuthenticated != true)
+            {
+                return false;
+            }
+
+            var freshState = await FetchAuthStateAsync();
+            return freshState.User.Identity?.IsAuthenticated == true;
+        }
+        public void NotifyUserLoggedIn()
+        {
+            NotifyAuthenticationStateChanged(FetchAuthStateAsync());
         }
         public void NotifyUserLoggedOut()
         {
-            _cachedAuthStateTask = Task.FromResult(_loggedOut);
-            NotifyAuthenticationStateChanged(_cachedAuthStateTask);
+            NotifyAuthenticationStateChanged(Task.FromResult(_loggedOut));
         }
         private async Task<AuthenticationState> FetchAuthStateAsync()
         {
             try
             {
                 var client = _httpClientFactory.CreateClient("BBBBackEnd");
-                var response = await client.GetAsync("api/auth/me");
+                var request = new HttpRequestMessage(HttpMethod.Get, "api/auth/me");
+
+                if (!string.IsNullOrEmpty(_cookieContainer.CookieHeader))
+                {
+                    request.Headers.Add("Cookie", _cookieContainer.CookieHeader);
+                }
+
+                var response = await client.SendAsync(request);
 
                 if (!response.IsSuccessStatusCode) return _loggedOut;
 

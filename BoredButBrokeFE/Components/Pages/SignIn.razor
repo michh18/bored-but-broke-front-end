@@ -7,7 +7,6 @@
 @inject NavigationManager NavigationManager
 @inject CookieAuthStateProvider AuthStateProvider
 
-
 <PageTitle>Sign In | Bored But Broke</PageTitle>
 <HeadContent>
     <link rel="stylesheet" href="css/signin.css" />
@@ -57,7 +56,9 @@
                     <ValidationMessage For="@(() => loginModel.Password)" class="text-danger" />
                 </div>
 
-                <button type="submit" class="btn-submit">Sign In</button>
+                <button type="submit" class="btn-submit" disabled="@(IsLoading)">
+                    @(IsLoading ? "Processing..." : "Sign In")
+                </button>
             </EditForm>
         }
         else
@@ -106,7 +107,9 @@
                     <ValidationMessage For="@(() => regModel.Confirm)" class="text-danger" />
                 </div>
 
-                <button type="submit" class="btn-submit">Create Account</button>
+                <button type="submit" class="btn-submit" disabled="@(IsLoading)">
+                    @(IsLoading ? "Processing..." : "Create Account")
+                </button>
             </EditForm>
         }
     </div>
@@ -114,7 +117,7 @@
 
 @code {
     private bool IsSignIn { get; set; } = true;
-    private bool IsLoading { get; set; } = true;
+    private bool IsLoading { get; set; } = false;
 
     private string SignInEmail { get; set; } = string.Empty;
     private string SignInPassword { get; set; } = string.Empty;
@@ -148,9 +151,9 @@
 
             if (response.IsSuccessStatusCode)
             {
-                await AuthStateProvider.NotifyUserLoggedIn();
+                AuthStateProvider.NotifyUserLoggedIn();
                 SuccessMessage = "Login successful! Redirecting to the home page...";
-                await Task.Delay(1500);
+                await Task.Delay(500);
                 NavigationManager.NavigateTo("/");
             }
             else if (response.StatusCode == System.Net.HttpStatusCode.TooManyRequests)
