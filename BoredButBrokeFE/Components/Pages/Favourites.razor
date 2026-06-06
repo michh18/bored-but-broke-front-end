@@ -1,9 +1,11 @@
 ﻿@page "/favourites"
+@attribute [Authorize]
 @inject IHttpClientFactory HttpClientFactory
 @inject NavigationManager Navigation
 @using BoredButBrokeFE.Components.Models
 @using System.Text.Json
 @using System.Text.Json.Serialization
+@using Microsoft.AspNetCore.Authorization
 
 <PageTitle>Favourites</PageTitle>
 
